@@ -308,6 +308,16 @@ $nombre = $_SESSION["nombre"];
   ?>
 
   <script>
+    function ver_div() {
+      var repo = document.getElementById("repo").value;
+      if (repo == 'produccion_item') {
+        document.getElementById('formulario').action = "reports/generico.php";
+      } else {
+        document.getElementById('formulario').action = "genera_reporte.php";
+      }
+    }
+
+
     if (repo == 'permisos') {
       document.getElementById('div_combo').style.display = "";
       document.getElementById('div_fechas').style.display = "none";
