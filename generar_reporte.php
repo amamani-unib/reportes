@@ -2479,6 +2479,9 @@ $script_tabla = "<script>
         case 'pagos_anticipados':
           include "reports/siniestros/pagos_anticipados.php";
           break;
+        case 'pagos_anticipados_ot':
+          include "reports/siniestros/pagos_anticipados_ot.php";
+          break;
         case 'reporte_comercial_usd_t':
           include "reports/emision/reporte_comercial_usd.php";
           break;
@@ -2499,6 +2502,9 @@ $script_tabla = "<script>
           break;
         case 'siniestros_liquidados_otros':
           include "reports/siniestros/siniestros_liguidados_otros.php";
+          break;
+        case 'siniestro_ot_op':
+          include "reports/siniestros/siniestro_ot_op.php";
           break;
       }
 
