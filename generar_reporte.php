@@ -2504,7 +2504,7 @@ $script_tabla = "<script>
           include "reports/siniestros/siniestros_liguidados_otros.php";
           break;
         case 'siniestro_ot_op':
-          include "reports/siniestros/siniestro_ot_op.php";
+          include "reports/auditoria/siniestro_ot_op.php";
           break;
       }
 

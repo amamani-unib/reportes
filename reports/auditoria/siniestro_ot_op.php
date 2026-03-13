@@ -30,9 +30,7 @@ LEFT JOIN comercial.orden_pago op
 LEFT JOIN comercial.trabajo_compra otc
     ON otc.cod_siniestro = s.cod_siniestro
 LEFT JOIN comercial.usuarios_comercial u
-    ON u.usuario = lr.usuario
-WHERE  and s.f_registro > '2025-03-01' and s.f_registro<'2025-12-01'
-GROUP BY  ";
+    ON u.usuario = lr.usuario";
 
 if (!isset($_POST['cb_lapso'])) {
     $consulta .= " WHERE s.f_registro like '%$fecha_dia%'";
