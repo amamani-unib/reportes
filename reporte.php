@@ -100,6 +100,7 @@ $nombre = $_SESSION["nombre"];
                             <option value="log_monto_reserva_ac">Monto de reserva - Logs</option>
                             <option value="correspodencia_cite_hoja_log">Correspondencia - Hojas de ruta - derivaciones</option>
                             <option value="correspodencia_cites">Correspondencia - cites</option>
+                            <option value="siniestro_ot_op">Siniestros - Ordenes de Trabajo-Compra - Ordenes de Pago</option>
                           <?php
                           }
                           if ($tipo_usuario == 'admin' or $tipo_usuario == 'GERENTE GENERAL' or $tipo_usuario == 'COBRANZA') {
@@ -226,6 +227,7 @@ $nombre = $_SESSION["nombre"];
                           ?>
 
                             <option value="pagos_anticipados">Siniestros - Pago Anticipos - Sistema Unisersoft</option>
+                            <option value="pagos_anticipados_ot">Siniestros - Pago Anticipos - Ordenes Trabajo/Compra Sistema Unisersoft</option>
                           <?php
                           }
                           if ($tipo_usuario == 'admin' or $tipo_usuario == 'GERENTE GENERAL' or $tipo_usuario == 'UIF' or $tipo_usuario == 'AUDITORIA') {
