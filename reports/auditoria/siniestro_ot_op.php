@@ -1,23 +1,18 @@
 <?php
 $consulta = "SELECT 
     s.cod_siniestro AS codigo_siniestro,
-    s.f_registro as fecha_registro_siniestro,
     DATE(lr.f_registro) AS fecha_registro_modificacion,
     TIME(lr.f_registro) AS hora_registro_modificacion,
-    CONCAT(u.usuario_nombre,' ', u.usuario_apellido,' ',u.segundo_apellido) AS usuario_registro,
+    CONCAT(u.usuario_nombre,' ', u.usuario_apellido,' ', u.segundo_apellido) AS usuario_registro,
     lr.valores_old AS glosa,
     lr.valores_new AS importe_movimiento,
-    lr.claves,
-    GROUP_CONCAT(
-        DISTINCT otc.cod_trabajo_compra,' ','MONEDA: ', otc.moneda,' ','MONTO TOTAL: ',otc.sum_monto
-        ORDER BY otc.cod_trabajo_compra
-        SEPARATOR '/ '
-    ) AS orden_trabajo_compra,
-    GROUP_CONCAT(
-        DISTINCT op.cod_orden,' ','MONEDA: BS MONTO TOTAL:', op.pago_total_bs
-        ORDER BY op.cod_orden
-        SEPARATOR '/ '
-    ) AS orden_pago,
+    otc.cod_trabajo_compra,
+    otc.moneda,
+    otc.sum_monto,
+    otc.estado AS estado_trabajo_compra,
+    op.cod_orden,
+    op.pago_total_bs,
+    op.estado AS estado_orden_pago,
     s.monto_reserva,
     lr.estado AS estado_registro,
     s.estado AS estado_siniestro
@@ -30,7 +25,7 @@ LEFT JOIN comercial.orden_pago op
 LEFT JOIN comercial.trabajo_compra otc
     ON otc.cod_siniestro = s.cod_siniestro
 LEFT JOIN comercial.usuarios_comercial u
-    ON u.usuario = lr.usuario";
+    ON u.usuario = lr.usuario  ";
 
 if (!isset($_POST['cb_lapso'])) {
     $consulta .= " WHERE s.f_registro like '%$fecha_dia%'";
@@ -45,7 +40,7 @@ if (!isset($_POST['cb_lapso'])) {
 }
 
 $consulta .= " AND s.cod_siniestro<>'CORTE' AND s.cod_siniestro <> ' ' GROUP BY s.cod_siniestro, lr.id_registro";
-//echo $consulta;
+echo $consulta;
 
 $result = mysqli_query($con, $consulta);
 
@@ -57,15 +52,19 @@ $result = mysqli_query($con, $consulta);
         <thead>
             <tr class='text-center'>
                 <th>Nro. Sinistro</th>
-                <th>Fecha de registro siniestro</th>
                 <th>Fecha modificacion</th>
                 <th>Hora modificacion</th>
                 <th>Usuario que registro modificacion</th>
                 <th>Glosa (datos antes de la modificacion)</th>
                 <th>Importe (Datos despues de la modificacion)</th>
-                <th>Ordenes de trabajo asosiados al siniestro (CODIGO-MONEDA-MONTO)</th>
-                <th>Ordenes de pago asosiado al siniestro (CODIGO-MONEDA-MONTO)</th>
-                <th>Monto de reserva</th>
+                <th>Orden de trabajo / compra</th>
+                <th>Moneda (OT/OC)</th>
+                <th>Monto (OT/OC)</th>
+                <th>Estado</th>
+                <th>Codigo de Orden de pago</th>
+                <th>Monto de Orden de pago (BS)</th>
+                <th>Estado Orden de pago</th>
+                <th>Monto de reserva inicial</th>
                 <th>Estado del registro de modificacion</th>
                 <th>Estado del siniestro</th>
             </tr>
@@ -73,18 +72,30 @@ $result = mysqli_query($con, $consulta);
         <tbody>
             <?php
             while ($row = mysqli_fetch_assoc($result)) {
+                $cod_siniestro = $row['codigo_siniestro'];
+                $mensaje = "REGISTRO DE SINIESTRO. $cod_siniestro - MONTO DE RESERVA:";
+                $sele2 = $con->query("SELECT  TRIM(SUBSTRING_INDEX(movimiento, 'MONTO DE RESERVA:', -1)) AS reserva_inicial 
+                FROM comercial.log_comercial where movimiento LIKE CONCAT('$mensaje', '%') limit 1");
+                //echo $sele2;
+                $filas2 = $sele2->fetch_assoc();
+                $reserva_inicial = $filas2['reserva_inicial'];
+
             ?>
                 <tr>
                     <td><?php echo $row['codigo_siniestro']; ?></td>
-                    <td><?php echo $row['fecha_registro_siniestro']; ?></td>
                     <td><?php echo $row['fecha_registro_modificacion']; ?></td>
                     <td><?php echo $row['hora_registro_modificacion']; ?></td>
                     <td><?php echo $row['usuario_registro']; ?></td>
                     <td><?php echo $row['glosa']; ?></td>
                     <td><?php echo $row['importe_movimiento']; ?></td>
-                    <td><?php echo $row['orden_trabajo_compra']; ?></td>
-                    <td><?php echo $row['orden_pago']; ?></td>
-                    <td><?php echo $row['monto_reserva']; ?></td>
+                    <td><?php echo $row['cod_trabajo_compra']; ?></td>
+                    <td><?php echo $row['moneda']; ?></td>
+                    <td><?php echo $row['sum_monto']; ?></td>
+                    <td><?php echo $row['estado_trabajo_compra']; ?></td>
+                    <td><?php echo $row['cod_orden']; ?></td>
+                    <td><?php echo $row['pago_total_bs']; ?></td>
+                    <td><?php echo $row['estado_orden_pago']; ?></td>
+                    <td><?php echo $reserva_inicial; ?></td>
                     <td><?php echo $row['estado_registro']; ?></td>
                     <td><?php echo $row['estado_siniestro']; ?></td>
                 </tr>
