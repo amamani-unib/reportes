@@ -104,9 +104,9 @@ if (!$result) {
 // Funciones auxiliares para procesar datos según el tipo de fuente
 function extraerMontoDelMovimiento($movimiento)
 {
-    // Extrae el número al final del texto después de "MONTO DE RESERVA:"
-    if (preg_match('/MONTO DE RESERVA:\s*([\d.,]+)/', $movimiento, $matches)) {
-        return trim($matches[1]);
+    // Extrae el monto después de "MONTO DE RESERVA:" ignorando puntuación final.
+    if (preg_match('/MONTO DE RESERVA:\s*([0-9]+(?:[.,][0-9]+)?)/i', $movimiento, $matches)) {
+        return rtrim(trim($matches[1]), ".,;:");
     }
     return '';
 }
