@@ -9,15 +9,15 @@ if (!isset($_POST['cb_lapso'])) {
     $filtro_otc = " AND DATE(otc.f_registro) = '$fecha_dia'";
     $filtro_op = " AND DATE(op.f_registro) = '$fecha_dia'";
     $fecha_aux = $fecha_dia;
-    $msj_log = "REPORTE AUDITORÍA DE SINIESTROS UNISERSOFT EL $fecha_dia";
-    $titulo = "REPORTE AUDITORÍA DE SINIESTROS - SISTEMA UNISERSOFT DEL $fecha_dia";
+    $msj_log = "REPORTE DE SINIESTROS UNISERSOFT EL $fecha_dia";
+    $titulo = "REPORTE DE SINIESTROS - SISTEMA UNISERSOFT DEL $fecha_dia";
 } else {
     $filtro_log = " AND DATE(lc.fecha) >= DATE('$fecha_inicio') AND DATE(lc.fecha) <= DATE('$fecha_final')";
     $filtro_otc = " AND DATE(otc.f_registro) >= DATE('$fecha_inicio') AND DATE(otc.f_registro) <= DATE('$fecha_final')";
     $filtro_op = " AND DATE(op.f_registro) >= DATE('$fecha_inicio') AND DATE(op.f_registro) <= DATE('$fecha_final')";
     $fecha_aux = $fecha_final;
-    $msj_log = "REPORTE AUDITORÍA DE SINIESTROS BASE UNISERSOFT ENTRE $fecha_inicio Y $fecha_final";
-    $titulo = "REPORTE AUDITORÍA DE SINIESTROS - SISTEMA UNISERSOFT DESDE $fecha_inicio HASTA $fecha_final";
+    $msj_log = "REPORTE DE SINIESTROS BASE UNISERSOFT ENTRE $fecha_inicio Y $fecha_final";
+    $titulo = "REPORTE DE SINIESTROS - SISTEMA UNISERSOFT DESDE $fecha_inicio HASTA $fecha_final";
 }
 
 // Consulta UNION: Registros de log_comercial + trabajo_compra + orden_pago
@@ -39,7 +39,8 @@ $consulta = "SELECT
     NULL AS trabajo_compra_id
 FROM comercial.log_comercial lc
 WHERE (lc.movimiento LIKE 'REGISTRO DE SINIESTRO%' 
-       OR lc.movimiento LIKE 'ACTUALIZACION DE ESTADO DEL SINIESTRO%')
+       OR lc.movimiento LIKE 'ACTUALIZACION DE ESTADO DEL SINIESTRO%'
+       OR lc.movimiento LIKE 'ACTUALIZADO - SINIESTRO%')
 AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(lc.movimiento, '. ', -1), ' - ', 1)) <> ''
 AND UPPER(TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(lc.movimiento, '. ', -1), ' - ', 1))) NOT IN ('ANULADO', 'ELIMINADO')
 $filtro_log
@@ -125,6 +126,8 @@ function determinarGlosa($movimiento)
     if (strpos($movimiento, 'REGISTRO DE SINIESTRO') === 0) {
         return 'REGISTRO DE SINIESTRO';
     } elseif (strpos($movimiento, 'ACTUALIZACION DE ESTADO DEL SINIESTRO') === 0) {
+        return 'ACTUALIZACION DE SINIESTRO';
+    } elseif (strpos($movimiento, 'ACTUALIZADO - SINIESTRO') === 0) {
         return 'ACTUALIZACION DE SINIESTRO';
     }
     return '';
