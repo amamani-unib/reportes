@@ -1,7 +1,7 @@
 <?php
 $msj_log = "REPORTE SINIESTROS LIQUIDADOS OTROS";
 $consulta = "SELECT op.cod_siniestro, op.f_registro, op.ramo, op.cobertura_afectada, op.asegurado,
-op.cod_poliza, op.importe_dls, op.importe_bs, op.cod_orden, op.receptor, op.doc_descargo, op.f_indemnizacion,
+op.cod_poliza, op.importe_dls, op.importe_bs, op.cod_orden, op.receptor,op.nit_receptor , op.doc_descargo, op.f_indemnizacion,
 op.indemnizacion, op.usuario, op.ramo, op.retencion_bs, op.pago_total_bs, op.concepto,s.ramo_general,
 s.estado, s.valor_asegurado, s.tipo_asegurado, s.cod_cliente, s.inicio_v, s.fin_v, s.dep_siniestro,s.cobertura AS cobertura_siniestro,s.sucursal,
 s.observaciones,s.f_siniestro,s.f_denuncia,s.detalle_siniestro, s.f_registro as fecha_reg, s.inspector
@@ -44,6 +44,7 @@ $result = mysqli_query($con, $consulta);
                 <th>Liquidados por Pagar(Bs)</th>
                 <th>Nro. Orden Pago</th>
                 <th>Beneficiario</th>
+                <th>NIT Beneficiario</th>
                 <th>Tipo Documento</th>
                 <th>Fecha Indemnizacion</th>
                 <th>Indemnizacion</th>
@@ -99,6 +100,7 @@ $result = mysqli_query($con, $consulta);
                     <td><?php echo $row['importe_bs']; ?></td>
                     <td><?php echo $row['cod_orden']; ?></td>
                     <td><?php echo $row['receptor']; ?></td>
+                    <td><?php echo $row['nit_receptor']; ?></td>
                     <td><?php echo $row['doc_descargo']; ?></td>
                     <td><?php echo $row['f_indemnizacion']; ?></td>
                     <td><?php echo $row['indemnizacion']; ?></td>
