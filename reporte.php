@@ -100,6 +100,7 @@ $nombre = $_SESSION["nombre"];
                             <option value="log_monto_reserva_ac">Monto de reserva - Logs</option>
                             <option value="correspodencia_cite_hoja_log">Correspondencia - Hojas de ruta - derivaciones</option>
                             <option value="correspodencia_cites">Correspondencia - cites</option>
+                            <option value="siniestro_ot_op">Siniestros - Ordenes de Trabajo-Compra - Ordenes de Pago</option>
                           <?php
                           }
                           if ($tipo_usuario == 'admin' or $tipo_usuario == 'GERENTE GENERAL' or $tipo_usuario == 'COBRANZA') {
@@ -185,8 +186,10 @@ $nombre = $_SESSION["nombre"];
                             $tipo_usuario == 'UIF' or $tipo_usuario == 'GNAF' or $tipo_usuario == 'GERENTE RECLAMOS' or $tipo_usuario == 'JEFE RECLAMOS' or $tipo_usuario == 'AUDITORIA'
                           ) {
                           ?>
-                            <option value="sinistros_liquidados_au">Siniestros liquidados automovil - Sistema Unibienes</option>
-                            <option value="sinistros_liquidados_au_unisersoft">Siniestros liquidados automovil - Sistema Unisersoft</option>
+                            <option value="siniestros_liquidados_au">Siniestros liquidados automovil - Sistema Unibienes</option>
+                            <option value="siniestros_liquidados_au_unisersoft">Siniestros liquidados automovil - Sistema Unisersoft</option>
+                            <option value="siniestros_liquidados_au_unisersoft_detalle">Siniestros liquidados automovil Detalle - Sistema Unisersoft</option>
+
                           <?php
                           }
                           if (
@@ -194,7 +197,8 @@ $nombre = $_SESSION["nombre"];
                             $tipo_usuario == 'INSPECTOR' or $tipo_usuario == 'GNAF' or $tipo_usuario == 'GERENTE RECLAMOS' or $tipo_usuario == 'JEFE RECLAMOS' or $tipo_usuario == 'AUDITORIA'
                           ) {
                           ?>
-                            <option value="sinistros_liquidados_otros">Siniestros liquidados otros - Sistema Unisersoft</option>
+                            <option value="siniestros_liquidados_otros">Siniestros liquidados otros - Sistema Unisersoft</option>
+                            <option value="siniestros_liquidados_otros_unisersoft_detalle">Siniestros liquidados otros Detalle- Sistema Unisersoft</option>
 
                           <?php
                           }
@@ -223,6 +227,7 @@ $nombre = $_SESSION["nombre"];
                           ?>
 
                             <option value="pagos_anticipados">Siniestros - Pago Anticipos - Sistema Unisersoft</option>
+                            <option value="pagos_anticipados_ot">Siniestros - Pago Anticipos - Ordenes Trabajo/Compra Sistema Unisersoft</option>
                           <?php
                           }
                           if ($tipo_usuario == 'admin' or $tipo_usuario == 'GERENTE GENERAL' or $tipo_usuario == 'UIF' or $tipo_usuario == 'AUDITORIA') {
