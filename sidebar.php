@@ -29,7 +29,7 @@ $con->query("SET NAMES 'utf8'");
             }elseif (
                 $tipo_usuario == "ESTADISTICA" or $tipo_usuario == "COMERCIAL" or
                 $tipo_usuario == "LIQUIDADOR" or $tipo_usuario == 'INSPECTOR' or $tipo_usuario == 'AUDITORIA' or $tipo_usuario == 'UIF' or $tipo_usuario == 'ESTATAL'  or $tipo_usuario == 'GERENTE COMERCIAL'
-				or $tipo_usuario == 'COBRANZA' or $tipo_usuario == 'JEFE COMERCIAL' or $tipo_usuario == 'EMISION' or $tipo_usuario == 'JEFE EMISION' or $tipo_usuario == 'GERENTE RECLAMOS' or $tipo_usuario == 'JEFE RECLAMOS' or $tipo_usuario='COTIZADOR RECLAMOS'
+				or $tipo_usuario == 'COBRANZA' or $tipo_usuario == 'JEFE COMERCIAL' or $tipo_usuario == 'EMISION' or $tipo_usuario == 'JEFE EMISION' or $tipo_usuario == 'GERENTE RECLAMOS' or $tipo_usuario == 'JEFE RECLAMOS' or $tipo_usuario == 'COTIZADOR RECLAMOS'
             ) { ?>
                 <li class="<?php if (isset($active5)) {
                                 echo $active5;
