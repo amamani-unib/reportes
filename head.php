@@ -2,21 +2,15 @@
 if (!isset($_SESSION)) {
     session_start();
 }
-$username = $_GET['username'];
-include "config/config.php";
-$con->query("SET NAMES 'utf8'");
-$select_cod = "SELECT cod_usuario, usuario, usuario_distrito, usuario_cargo, usuario_nombre FROM comercial.usuarios_comercial WHERE usuario='$username'";
-$query_cod = mysqli_query($con, $select_cod);
-$row_cod = mysqli_fetch_array($query_cod);
-//echo "---> " . $row_cod['cod_usuario'] . " <---";
+
+
 if (!isset($_SESSION['usuario']) && $_SESSION['password'] == null) {
-    $message = "Por favor, inicie sesión.";
-    header("location: http://192.168.10.88:5173/inicio?message=$message");
+    header("location: index.php");
 }
-$usuario = isset($_SESSION['usuario']) ? $_SESSION['usuario'] : $row_cod['usuario'];
-$distrito = isset($_SESSION['distrito']) ? $_SESSION['distrito'] : $row_cod['usuario_distrito'];
-$cargo = isset($_SESSION['usuario_cargo']) ? $_SESSION['usuario_cargo'] : $row_cod['usuario_cargo'];
-$nombre = isset($_SESSION['nombre']) ? $_SESSION['nombre'] : $row_cod['usuario_nombre'];
+$usuario = $_SESSION['usuario'];
+$distrito = $_SESSION['distrito'];
+$cargo = $_SESSION['usuario_cargo'];
+$nombre = $_SESSION['nombre'];
 
 
 ?>
@@ -36,7 +30,8 @@ $nombre = isset($_SESSION['nombre']) ? $_SESSION['nombre'] : $row_cod['usuario_n
     <!-- Font Awesome 
           <link href="css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
         -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"
+        crossorigin="anonymous"></script>
 
 
     <!-- NProgress -->
