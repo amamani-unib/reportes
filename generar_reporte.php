@@ -105,7 +105,7 @@ $script_tabla = "<script>
       switch ($repo) {
         case 'reporte_trabajo_compra':
 
-          $consulta = "SELECT tc.usuario, tc.cod_siniestro, tc.cod_poliza, tc.modelo as tipo, tc.cod_trabajo_compra as codigo, tc.asegurado, tc.total as sum_monto, num_reparaciones as cantidad_items, tcr.concepto , tcr.descripcion, tcr.monto as precio, tc.moneda, tcr.f_registro, tcr.cantidad, tc.proveedor
+          $consulta = "SELECT tc.usuario, tc.cod_siniestro, tc.cod_poliza, tc.modelo as tipo, tc.cod_trabajo_compra as codigo, tc.asegurado, tc.total as sum_monto, num_reparaciones as cantidad_items, tcr.concepto , tcr.descripcion, tcr.monto as precio, tc.moneda, tcr.f_registro, tcr.cantidad, tc.proveedor, tc.descuento
           FROM trabajo_compra as tc INNER JOIN trabajo_compra_reparaciones AS tcr ON tc.cod_trabajo_compra = tcr.cod_trabajo_compra";
           if (!isset($_POST['cb_lapso'])) {
             $consulta .= " WHERE tc.f_registro like '%$fecha_dia%' and tc.estado <> 'ELIMINADO'";
@@ -144,6 +144,7 @@ $script_tabla = "<script>
                   <th>CONCEPTO</th>
                   <th>PRECIO</th>
                   <th>PROVEEDOR</th>
+                  <th>DESCUENTO</th>
                 </tr>
               </thead>
               <tbody>
@@ -173,6 +174,9 @@ $script_tabla = "<script>
                     <td><?php echo $row['precio']; ?></td>
                     <td>
                       <?php echo $row['proveedor']; ?>
+                    </td>
+                    <td>
+                      <?php echo $row['descuento']; ?>
                     </td>
                   </tr>
                   <?php
