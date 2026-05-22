@@ -76,7 +76,7 @@ $con->query("SET NAMES 'utf8'");
                     </ul>
                 </li>
                 <li class="">
-                    <a href="<?= "http://192.168.10.88:5173/inicio" ?>">
+                    <a href="../unisersoft/dashboard.php">
                         <span class=" fa fa-home"></span>
                     </a>
                 </li>
