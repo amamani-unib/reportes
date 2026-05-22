@@ -105,8 +105,8 @@ $script_tabla = "<script>
       switch ($repo) {
         case 'reporte_trabajo_compra':
 
-          $consulta = "SELECT tc.usuario, tc.cod_siniestro, tc.cod_poliza, tc.modelo as tipo, tc.cod_trabajo_compra as codigo, tc.asegurado, tc.total as sum_monto, num_reparaciones as cantidad_items, tcr.concepto , tcr.descripcion, tcr.monto as precio, tc.moneda, tcr.f_registro, tcr.cantidad
-                      FROM  trabajo_compra as tc INNER JOIN trabajo_compra_reparaciones AS tcr ON tc.cod_trabajo_compra = tcr.cod_trabajo_compra";
+          $consulta = "SELECT tc.usuario, tc.cod_siniestro, tc.cod_poliza, tc.modelo as tipo, tc.cod_trabajo_compra as codigo, tc.asegurado, tc.total as sum_monto, num_reparaciones as cantidad_items, tcr.concepto , tcr.descripcion, tcr.monto as precio, tc.moneda, tcr.f_registro, tcr.cantidad, tc.proveedor, tc.descuento
+          FROM trabajo_compra as tc INNER JOIN trabajo_compra_reparaciones AS tcr ON tc.cod_trabajo_compra = tcr.cod_trabajo_compra";
           if (!isset($_POST['cb_lapso'])) {
             $consulta .= " WHERE tc.f_registro like '%$fecha_dia%' and tc.estado <> 'ELIMINADO'";
             $fecha_aux = $fecha_dia;
@@ -122,11 +122,12 @@ $script_tabla = "<script>
 
           // echo $consulta;
           $result = mysqli_query($con, $consulta);
-      ?>
+          ?>
           <h2 align="center"><?= $titulo ?> </h2>
           <br>
           <div id="datos_reportes" class="table-responsive table">
-            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%' id='tabla_generar'>
+            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%'
+              id='tabla_generar'>
               <thead>
                 <tr class='text-center'>
                   <th>FECHA DE REGISTRO</th>
@@ -142,6 +143,8 @@ $script_tabla = "<script>
                   <th>DESCRIPCIÓN</th>
                   <th>CONCEPTO</th>
                   <th>PRECIO</th>
+                  <th>PROVEEDOR</th>
+                  <th>DESCUENTO</th>
                 </tr>
               </thead>
               <tbody>
@@ -154,7 +157,8 @@ $script_tabla = "<script>
                     $total_bolivianos = $row['sum_monto'];
                     $total_dolares = $row['sum_monto'] / 6.96;
                   }
-                ?><tr>
+                  ?>
+                  <tr>
                     <td><?php echo $row['f_registro']; ?></td>
                     <td><?php echo $row['usuario']; ?></td>
                     <td><?php echo $row['cod_siniestro']; ?></td>
@@ -168,20 +172,26 @@ $script_tabla = "<script>
                     <td><?php echo $row['descripcion']; ?></td>
                     <td><?php echo $row['concepto']; ?></td>
                     <td><?php echo $row['precio']; ?></td>
+                    <td>
+                      <?php echo $row['proveedor']; ?>
+                    </td>
+                    <td>
+                      <?php echo $row['descuento']; ?>
+                    </td>
                   </tr>
-                <?php
+                  <?php
                 }
                 ?>
               </tbody>
               <?php echo $script_tabla; ?>
             </table>
           </div>
-        <?php
+          <?php
           break;
         case 'reporte_comercial2':
           //SEGUN REUNION DEL 2022-09-15 Se toma como dato referencia para reporte de produccion la fecha de inicio de vigencia de poliza
           // $msj_log = "REPORTE PRODUCCION COMERCIAL";
-
+      
           $consulta = "SELECT pc.id_calculo_prima,month(pc.f_registro) as mes,year(pc.f_registro) as anio, rc.cod_poliza,rc.cod_cliente, rc.regional,rc.tomador,pc.asegurado,rc.cod_cotizacion,
             rc.ramo,rc.tipo_poliza,pc.movimiento,rc.nro_anexo, rc.asi_vial, rc.cant_autos, pc.observaciones, 
             ROUND(pc.valor_asegurado,2),ROUND(pc.valor_primera_perdida,2),ROUND(pc.valor_terremoto,2), ROUND(pc.valor_terrorismo,2),
@@ -208,11 +218,12 @@ $script_tabla = "<script>
           $consulta .= " ORDER BY pc.f_registro ASC";
           //echo $consulta;
           $result = mysqli_query($con, $consulta);
-        ?>
+          ?>
           <h2 align="center"><?= $titulo ?> </h2>
           <br>
           <div id="datos_reportes" class="table-responsive table">
-            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%' id='tabla_generar'>
+            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%'
+              id='tabla_generar'>
               <thead>
                 <tr class='text-center'>
                   <th>Nro. REGISTRO</th>
@@ -271,7 +282,8 @@ $script_tabla = "<script>
                   } else {
                     $asistencia_vial = $row['asi_vial'];
                   }
-                ?><tr>
+                  ?>
+                  <tr>
                     <td><?php echo $row['id_calculo_prima']; ?></td>
                     <td><?php echo $row['mes']; ?></td>
                     <td><?php echo $row['anio']; ?></td>
@@ -312,18 +324,18 @@ $script_tabla = "<script>
                     <td><?php echo $row['usuario']; ?></td>
                     <td><?php echo $row['modalidad']; ?></td>
                   </tr>
-                <?php
+                  <?php
                 }
                 ?>
               </tbody>
               <?php echo $script_tabla; ?>
             </table>
           </div>
-        <?php
+          <?php
           break;
         case 'comercial_especifico':
           //$msj_log = "REPORTE COMERCIAL ESPECIFICO";
-
+      
           $consulta = "SELECT nro_poliza, cod_cliente, tipo_movimiento, regional, valor_asegurado, tomador, prima_total, asegurado, 
           fecha_emision, ramo, f_inicio_vigencia, f_final_vigencia, tipo_cartera, fecha_registro 
           FROM unibienes.reporte_comercial";
@@ -340,11 +352,12 @@ $script_tabla = "<script>
           }
 
           $result = mysqli_query($con, $consulta);
-        ?>
+          ?>
           <h2 align="center"><?= $titulo ?> </h2>
           <br>
           <div id="datos_reportes" class="table-responsive table">
-            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%' id='tabla_generar'>
+            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%'
+              id='tabla_generar'>
               <thead>
                 <tr class='text-center'>
                   <th>NRO POLIZA</th>
@@ -366,7 +379,7 @@ $script_tabla = "<script>
               <tbody>
                 <?php
                 while ($row = mysqli_fetch_assoc($result)) {
-                ?>
+                  ?>
                   <tr>
                     <td><?php echo $row['nro_poliza']; ?></td>
                     <td><?php echo $row['cod_cliente']; ?></td>
@@ -383,7 +396,7 @@ $script_tabla = "<script>
                     <td><?php echo $row['tipo_cartera']; ?></td>
                     <td><?php echo $row['fecha_registro']; ?></td>
                   </tr>
-                <?php
+                  <?php
                 }
                 ?>
               </tbody>
@@ -391,7 +404,7 @@ $script_tabla = "<script>
 
             </table>
           </div>
-        <?php
+          <?php
           break;
         case 'reporte_comercial':
           //$msj_log = "REPORTE COMERCIAL";
@@ -411,11 +424,12 @@ $script_tabla = "<script>
           }
 
           $result = mysqli_query($con, $consulta);
-        ?>
+          ?>
           <h2 align="center"><?= $titulo ?> </h2>
           <br>
           <div id="datos_reportes" class="table-responsive table">
-            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%' id='tabla_generar'>
+            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%'
+              id='tabla_generar'>
               <thead>
                 <tr class='text-center'>
                   <th>Codigo</th>
@@ -457,7 +471,7 @@ $script_tabla = "<script>
               <tbody>
                 <?php
                 while ($row = mysqli_fetch_assoc($result)) {
-                ?>
+                  ?>
                   <tr>
                     <td><?php echo $row['id_rc']; ?></td>
                     <td><?php echo $row['mes']; ?></td>
@@ -494,7 +508,7 @@ $script_tabla = "<script>
                     <td><?php echo $row['numero_cuotas']; ?></td>
                     <td><?php echo $row['usuario']; ?></td>
                   </tr>
-                <?php
+                  <?php
                 }
                 ?>
               </tbody>
@@ -502,7 +516,7 @@ $script_tabla = "<script>
 
             </table>
           </div>
-        <?php
+          <?php
           break;
         case 'produccion':
           //$msj_log = "REPORTE PRODUCCION";
@@ -521,11 +535,12 @@ $script_tabla = "<script>
             $titulo = "VISTA PREVIA DE REPORTE PRODUCCIÓN. DESDE $fecha_inicio HASTA $fecha_final";
           }
 
-        ?>
+          ?>
           <h2 align="center"> <?= $titulo ?> </h2>
           <br>
           <div id="datos_reportes" class="table-responsive table">
-            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%' id='tabla_generar'>
+            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%'
+              id='tabla_generar'>
               <thead>
                 <tr class='text-center'>
                   <th>CIA</th>
@@ -611,7 +626,8 @@ $script_tabla = "<script>
               <tbody>
                 <?php
                 while ($row = mysqli_fetch_assoc($result)) {
-                ?><tr>
+                  ?>
+                  <tr>
                     <td><?php echo $row['cia']; ?></td>
                     <td><?php echo $row['nombre_cia']; ?></td>
                     <td><?php echo $row['cod_parte']; ?></td>
@@ -691,7 +707,7 @@ $script_tabla = "<script>
                     <td><?php echo $row['distrito']; ?></td>
                     <td><?php echo $row['f_registro']; ?></td>
                   </tr>
-                <?php
+                  <?php
                 }
                 ?>
               </tbody>
@@ -699,7 +715,7 @@ $script_tabla = "<script>
 
             </table>
           </div>
-        <?php
+          <?php
           break;
         case 'sinistros_liquidados_au_unisersoft':
           require_once "reports/siniestros/sinistros_liquidados_au_unisersoft.php";
@@ -733,11 +749,12 @@ $script_tabla = "<script>
           $consulta .= " GROUP BY s.num_siniestro";
 
           $result = mysqli_query($con, $consulta);
-        ?>
+          ?>
           <h2 align="center"><?= $titulo ?> </h2>
           <br>
           <div id="datos_reportes" class="table-responsive table">
-            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%' id='tabla_generar'>
+            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%'
+              id='tabla_generar'>
               <thead>
                 <tr class='text-center'>
                   <th>Nro. Sinistro</th>
@@ -762,11 +779,11 @@ $script_tabla = "<script>
                   <th>Estado</th>
                   <?php
                   if ($cargo == 'admin' or $cargo == 'ESTADISTICA') {
-                  ?>
+                    ?>
                     <th>DETALLE DE DAÑOS</th>
                     <th>CAMBIO DE ESTADO</th>
                     <th>FECHA DE CAMBIO DE ESTADO</th>
-                  <?php
+                    <?php
                   }
                   ?>
                   <th>Inspector</th>
@@ -800,7 +817,7 @@ $script_tabla = "<script>
                     $fin_vig = $filas23['r_fin_v'];
                   }
 
-                ?>
+                  ?>
                   <tr>
                     <td><?php echo $row['num_siniestro']; ?></td>
                     <td><?php echo $row['fecha_siniestro']; ?></td>
@@ -833,16 +850,16 @@ $script_tabla = "<script>
                         $final_fecha = explode(" ", $r['fecha_registro']);
                         $fecha_registro_aux .= $final_fecha[0] . "<br>";
                       }
-                    ?>
+                      ?>
                       <td><?php echo utf8_decode($row['datalle_dano']); ?></td>
                       <td><?= $estado_aux ?></td>
                       <td><?= $fecha_registro_aux ?></td>
-                    <?php
+                      <?php
                     }
                     ?>
                     <td><?php echo $row['insperctor']; ?></td>
                   </tr>
-                <?php
+                  <?php
                 }
                 ?>
               </tbody>
@@ -850,7 +867,7 @@ $script_tabla = "<script>
 
             </table>
           </div>
-        <?php
+          <?php
           break;
         //MODIFICACION DEL REPORTE DE CORRESPONDENCIA para las privilegios de vistas
         //dejar los espacios vacios
@@ -878,13 +895,14 @@ $script_tabla = "<script>
           $consulta .= " and estado != 'ANULADO' GROUP BY id_cartas ORDER BY num_hoja_ruta desc ";
 
           //echo $consulta;
-
+      
           $result = mysqli_query($con, $consulta);
-        ?>
+          ?>
           <h2 align="center"><?= $titulo ?> </h2>
           <br>
           <div id="datos_reportes" class="table-responsive table">
-            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%' id='tabla_generar'>
+            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%'
+              id='tabla_generar'>
               <thead>
                 <tr class='text-center'>
                   <th>#</th>
@@ -934,7 +952,7 @@ $script_tabla = "<script>
                   $nom_recepciona = $fila_recepciona['nombres'] . " " . $fila_recepciona['apellidos'];
                   $unidad_rec = $fila_recepciona['unidad'];
                   $regional_rec = $fila_recepciona['sucursal'];
-                ?>
+                  ?>
                   <tr>
                     <td><?php echo $k ?></td>
                     <td><?php echo $row['num_hoja_ruta']; ?></td>
@@ -952,7 +970,7 @@ $script_tabla = "<script>
                       <td><?php echo strtoupper($regional_rec) ?></td> -->
                     <td></td>
                   </tr>
-                <?php
+                  <?php
                   $k++;
                 }
                 ?>
@@ -960,7 +978,7 @@ $script_tabla = "<script>
               <?php echo $script_tabla; ?>
             </table>
           </div>
-        <?php
+          <?php
           break;
 
         case 'constancia_documentos_recepcion':
@@ -990,13 +1008,14 @@ $script_tabla = "<script>
           $consulta .= " AND user = '$usuario' and estado != 'ANULADO' GROUP BY id_cartas ORDER BY num_hoja_ruta desc ";
 
           //echo $consulta;
-
+      
           $result = mysqli_query($con, $consulta);
-        ?>
+          ?>
           <h2 align="center"><?= $titulo ?> </h2>
           <br>
           <div id="datos_reportes" class="table-responsive table">
-            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%' id='tabla_generar'>
+            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%'
+              id='tabla_generar'>
               <thead>
                 <tr class='text-center'>
                   <th>#</th>
@@ -1046,7 +1065,7 @@ $script_tabla = "<script>
                   $nom_recepciona = $fila_recepciona['nombres'] . " " . $fila_recepciona['apellidos'];
                   $unidad_rec = $fila_recepciona['unidad'];
                   $regional_rec = $fila_recepciona['sucursal'];
-                ?>
+                  ?>
                   <tr>
                     <td><?php echo $k ?></td>
                     <td><?php echo $row['num_hoja_ruta']; ?></td>
@@ -1058,7 +1077,7 @@ $script_tabla = "<script>
                     <td><?php echo utf8_decode(utf8_encode(strtoupper($nom_recepciona))) ?></td>
                     <td></td>
                   </tr>
-                <?php
+                  <?php
                   $k++;
                 }
                 ?>
@@ -1066,7 +1085,7 @@ $script_tabla = "<script>
               <?php echo $script_tabla; ?>
             </table>
           </div>
-        <?php
+          <?php
           break;
         case 'pxclife':
           $msj_log = "CONSTANCIA DE ENTREGA DE DOCUMENTOS";
@@ -1091,11 +1110,12 @@ $script_tabla = "<script>
           $consulta .= " and estado != 'ANULADO' GROUP BY id_pxc";
 
           $result = mysqli_query($con, $consulta);
-        ?>
+          ?>
           <h2 align="center"><?= $titulo ?> </h2>
           <br>
           <div id="datos_reportes" class="table-responsive table">
-            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%' id='tabla_generar'>
+            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%'
+              id='tabla_generar'>
               <thead>
                 <tr class='text-center'>
                   <th>Nro.</th>
@@ -1117,7 +1137,7 @@ $script_tabla = "<script>
               <tbody>
                 <?php
                 while ($row = mysqli_fetch_assoc($result)) {
-                ?>
+                  ?>
                   <tr>
                     <td><?php echo $row['id_pxc']; ?></td>
                     <td><?php echo $row['nro_poliza']; ?></td>
@@ -1134,14 +1154,14 @@ $script_tabla = "<script>
                     <td><?php echo $row['f_registro']; ?></td>
                     <td><?php echo $row['f_pago']; ?></td>
                   </tr>
-                <?php
+                  <?php
                 }
                 ?>
               </tbody>
               <?php echo $script_tabla; ?>
             </table>
           </div>
-        <?php
+          <?php
           break;
         case 'primas_cobranzas':
           //$msj_log = "CONSTANCIA DE ENTREGA DE DOCUMENTOS";
@@ -1166,13 +1186,14 @@ $script_tabla = "<script>
           $consulta .= " and estado != 'ELIMINADO'";
 
           //echo $consulta;
-
+      
           $result = mysqli_query($con, $consulta);
-        ?>
+          ?>
           <h2 align="center"><?= $titulo ?> </h2>
           <br>
           <div id="datos_reportes" class="table-responsive table">
-            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%' id='tabla_generar'>
+            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%'
+              id='tabla_generar'>
               <thead>
                 <tr class='text-center'>
                   <th>Nro.</th>
@@ -1197,7 +1218,7 @@ $script_tabla = "<script>
               <tbody>
                 <?php
                 while ($row = mysqli_fetch_assoc($result)) {
-                ?>
+                  ?>
                   <tr>
                     <td><?php echo $row['id_pxc']; ?></td>
                     <td><?php echo $row['cod_poliza']; ?></td>
@@ -1217,14 +1238,14 @@ $script_tabla = "<script>
                     <td><?php echo $row['f_registro']; ?></td>
                     <td><?php echo $row['f_pago']; ?></td>
                   </tr>
-                <?php
+                  <?php
                 }
                 ?>
               </tbody>
               <?php echo $script_tabla; ?>
             </table>
           </div>
-        <?php
+          <?php
           break;
         case 'siniestros_generales':
           $msj_log = "SINIESTROS GENERALES";
@@ -1250,11 +1271,12 @@ $script_tabla = "<script>
 
           $result = mysqli_query($con, $consulta);
           //echo $consulta;
-        ?>
+          ?>
           <h2 align="center"><?= $titulo ?> </h2>
           <br>
           <div id="datos_reportes" class="table-responsive table">
-            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%' id='tabla_generar'>
+            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%'
+              id='tabla_generar'>
               <thead>
                 <tr class='text-center'>
                   <th>Nro.</th>
@@ -1318,7 +1340,7 @@ $script_tabla = "<script>
                     $detalle_siniestros = $f2['narracion'];
                   }
 
-                ?>
+                  ?>
                   <tr>
                     <td><?php echo $row['id_sin']; ?></td>
                     <td><?php echo $row['cod_siniestro']; ?></td>
@@ -1350,14 +1372,14 @@ $script_tabla = "<script>
                     <td><?php echo $placa; ?></td>
                     <td><?php echo $uso; ?></td>
                   </tr>
-                <?php
+                  <?php
                 }
                 ?>
               </tbody>
               <?php echo $script_tabla; ?>
             </table>
           </div>
-        <?php
+          <?php
           break;
         case 'estadistica':
           $msj_log = "DATOS DE PRODUCCION";
@@ -1391,11 +1413,12 @@ $script_tabla = "<script>
 
           //  echo $consulta;
           $result = mysqli_query($con, $consulta);
-        ?>
+          ?>
           <h2 align="center"><?= $titulo ?> </h2>
           <br>
           <div id="datos_reportes" class="table-responsive table">
-            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%' id='tabla_generar'>
+            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%'
+              id='tabla_generar'>
               <thead>
                 <tr class='text-center'>
                   <th>ID REPORTE </th>
@@ -1462,7 +1485,7 @@ $script_tabla = "<script>
                     $asistencia_vial = $row['asi_vial'];
                   }
 
-                ?>
+                  ?>
                   <tr>
                     <td><?php echo $row['id_calculo_prima']; ?></td>
                     <td><?php echo $row['cod_unico']; ?></td>
@@ -1510,14 +1533,14 @@ $script_tabla = "<script>
                     <td><?php echo $row['ROUND(cp.com_intermediario,2)']; ?></td>
                     <td><?php echo $row['ROUND(cp.prima_riesgo_tecnica,2)']; ?></td>
                   </tr>
-                <?php
+                  <?php
                 }
                 ?>
               </tbody>
               <?php echo $script_tabla; ?>
             </table>
           </div>
-        <?php
+          <?php
           break;
         case 'comercial_clientes':
           $msj_log = "REPORTE CLIENTES UNIBIENES";
@@ -1537,11 +1560,12 @@ $script_tabla = "<script>
           }
           $consulta .= "and estado <> 'ELIMINADO'";
           $result = mysqli_query($con, $consulta);
-        ?>
+          ?>
           <h2 align="center"><?= $titulo ?> </h2>
           <br>
           <div id="datos_reportes" class="table-responsive table">
-            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%' id='tabla_generar'>
+            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%'
+              id='tabla_generar'>
               <thead>
                 <tr class='text-center'>
                   <th>ID CLIENTE</th>
@@ -1613,7 +1637,7 @@ $script_tabla = "<script>
               <tbody>
                 <?php
                 while ($row = mysqli_fetch_assoc($result)) {
-                ?>
+                  ?>
                   <tr>
                     <td><?php echo $row['id_cliente']; ?></td>
                     <td><?php echo $row['nro_poliza']; ?></td>
@@ -1680,14 +1704,14 @@ $script_tabla = "<script>
                     <td><?php echo $row['estado']; ?></td>
                     <td><?php echo $row['tipo_agro']; ?></td>
                   </tr>
-                <?php
+                  <?php
                 }
                 ?>
               </tbody>
               <?php echo $script_tabla; ?>
             </table>
           </div>
-        <?php
+          <?php
           break;
         case 'libro_ventas':
           $msj_log = "REPORTE LIBRO VENTAS UNIBIENES";
@@ -1706,14 +1730,15 @@ $script_tabla = "<script>
             $titulo = "VISTA PREVIA DE LIBRO VENTAS UNIBIENES (Base Unibienes). ENTRE $fecha_inicio HASTA EL $fecha_final";
           }
           //echo $consulta;
-
+      
 
           $result = mysqli_query($con, $consulta);
-        ?>
+          ?>
           <h2 align="center"><?= $titulo ?> </h2>
           <br>
           <div id="datos_reportes" class="table-responsive table">
-            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%' id='tabla_generar'>
+            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%'
+              id='tabla_generar'>
               <thead>
                 <tr class='text-center'>
                   <th>ID LV</th>
@@ -1746,7 +1771,7 @@ $script_tabla = "<script>
               <tbody>
                 <?php
                 while ($row = mysqli_fetch_assoc($result)) {
-                ?>
+                  ?>
                   <tr>
                     <td><?php echo $row['id_lv']; ?></td>
                     <td><?php echo $row['fecha_factura']; ?></td>
@@ -1774,14 +1799,14 @@ $script_tabla = "<script>
                     <td><?php echo $row['distrito']; ?></td>
 
                   </tr>
-                <?php
+                  <?php
                 }
                 ?>
               </tbody>
               <?php echo $script_tabla; ?>
             </table>
           </div>
-        <?php
+          <?php
           break;
         case 'accionistas':
           $msj_log = "REPORTE ACCIONISTAS UNIBIENES";
@@ -1801,11 +1826,12 @@ $script_tabla = "<script>
           }
 
           $result = mysqli_query($con, $consulta);
-        ?>
+          ?>
           <h2 align="center"><?= $titulo ?> </h2>
           <br>
           <div id="datos_reportes" class="table-responsive table">
-            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%' id='tabla_generar'>
+            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%'
+              id='tabla_generar'>
               <thead>
                 <tr class='text-center'>
                   <th>ID ACCIONISTA</th>
@@ -1826,7 +1852,7 @@ $script_tabla = "<script>
               <tbody>
                 <?php
                 while ($row = mysqli_fetch_assoc($result)) {
-                ?>
+                  ?>
                   <tr>
                     <td><?php echo $row['id_accion']; ?></td>
                     <td><?php echo $row['nombres']; ?></td>
@@ -1842,14 +1868,14 @@ $script_tabla = "<script>
                     <td><?php echo $row['ingresos']; ?></td>
 
                   </tr>
-                <?php
+                  <?php
                 }
                 ?>
               </tbody>
               <?php echo $script_tabla; ?>
             </table>
           </div>
-        <?php
+          <?php
           break;
         case 'accionistas_unisersoft':
           //$msj_log = "REPORTE ACCIONISTAS UNIBIENES";
@@ -1871,11 +1897,12 @@ $script_tabla = "<script>
           $consulta .= " and estado='ACTIVO' AND ac_participacion > 0 ";
 
           $result = mysqli_query($con, $consulta);
-        ?>
+          ?>
           <h2 align="center"><?= $titulo ?> </h2>
           <br>
           <div id="datos_reportes" class="table-responsive table">
-            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%' id='tabla_generar'>
+            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%'
+              id='tabla_generar'>
               <thead>
                 <tr class='text-center'>
                   <th>ID ACCIONISTA</th>
@@ -1892,7 +1919,7 @@ $script_tabla = "<script>
               <tbody>
                 <?php
                 while ($row = mysqli_fetch_assoc($result)) {
-                ?>
+                  ?>
                   <tr>
                     <td><?php echo $row['id_accionista']; ?></td>
                     <td><?php echo $row['ac_nombre']; ?></td>
@@ -1905,14 +1932,14 @@ $script_tabla = "<script>
                     <td><?php echo $row['cod_cliente']; ?></td>
 
                   </tr>
-                <?php
+                  <?php
                 }
                 ?>
               </tbody>
               <?php echo $script_tabla; ?>
             </table>
           </div>
-        <?php
+          <?php
           break;
         case 'clientes_pep':
           //SEGUN REUNION DEL 2022-09-15 Se toma como dato referencia para reporte de produccion la fecha de inicio de vigencia de poliza
@@ -1941,11 +1968,12 @@ $script_tabla = "<script>
 
           //echo $consulta;
           $result = mysqli_query($con, $consulta);
-        ?>
+          ?>
           <h2 align="center"><?= $titulo ?> </h2>
           <br>
           <div id="datos_reportes" class="table-responsive table">
-            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%' id='tabla_generar'>
+            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%'
+              id='tabla_generar'>
               <thead>
                 <tr class='text-center'>
                   <th>CODIGO CLIENTE </th>
@@ -1959,7 +1987,7 @@ $script_tabla = "<script>
               <tbody>
                 <?php
                 while ($row = mysqli_fetch_assoc($result)) {
-                ?>
+                  ?>
                   <tr>
                     <td><?php echo $row['cod_cliente']; ?></td>
                     <td><?php echo $row['completo']; ?></td>
@@ -1968,18 +1996,18 @@ $script_tabla = "<script>
                     <td><?php echo $row['observaciones']; ?></td>
                     <td><?php echo $row['comentario']; ?></td>
                   </tr>
-                <?php
+                  <?php
                 }
                 ?>
               </tbody>
               <?php echo $script_tabla; ?>
             </table>
           </div>
-        <?php
+          <?php
           break;
         case 'automovil_unisersoft':
           //SEGUN REUNION DEL 2022-09-15 Se toma como dato referencia para reporte de produccion la fecha de inicio de vigencia de poliza
-
+      
           $consulta = "SELECT i.*, pcc.tipo_pago, pcc.intermediario FROM comercial.items as i INNER JOIN comercial.pol_calculo_prima as pcc ON i.cod_cotizacion=pcc.cod_cotizacion";
 
           if (!isset($_POST['cb_lapso'])) {
@@ -1996,11 +2024,12 @@ $script_tabla = "<script>
 
           //echo $consulta;
           $result = mysqli_query($con, $consulta);
-        ?>
+          ?>
           <h2 align="center"><?= $titulo ?> </h2>
           <br>
           <div id="datos_reportes" class="table-responsive table">
-            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%' id='tabla_generar'>
+            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%'
+              id='tabla_generar'>
               <thead>
                 <tr class='text-center'>
                   <th>COD. CLIENTE </th>
@@ -2040,7 +2069,7 @@ $script_tabla = "<script>
                   } else {
                     $prima_total = $row['5'];
                   }
-                ?>
+                  ?>
                   <tr>
                     <td><?php echo $row['cod_cliente']; ?></td>
                     <td><?php echo $row['9']; ?></td>
@@ -2069,18 +2098,18 @@ $script_tabla = "<script>
                     <td><?php echo $row['2']; ?></td>
                     <td><?php echo $row['f_registro']; ?></td>
                   </tr>
-                <?php
+                  <?php
                 }
                 ?>
               </tbody>
               <?php echo $script_tabla; ?>
             </table>
           </div>
-        <?php
+          <?php
           break;
         case 'sinistros_pendientes_unisersoft_automovil':
           //SEGUN REUNION DEL 2022-09-15 Se toma como dato referencia para reporte de produccion la fecha de inicio de vigencia de poliza
-
+      
           $consulta = "SELECT s.* , sd.*
            FROM comercial.siniestros as s INNER JOIN comercial.siniestro_detalles as sd on s.cod_siniestro=sd.cod_siniestro 
                 LEFT JOIN comercial.items as i ON s.id_item=i.id_registro";
@@ -2099,13 +2128,14 @@ $script_tabla = "<script>
 
           $consulta .= " GROUP BY s.cod_siniestro";
           //echo $consulta;
-
+      
           $result = mysqli_query($con, $consulta);
-        ?>
+          ?>
           <h2 align="center"><?= $titulo ?> </h2>
           <br>
           <div id="datos_reportes" class="table-responsive table">
-            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%' id='tabla_generar'>
+            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%'
+              id='tabla_generar'>
               <thead>
                 <tr class='text-center'>
                   <th>Nro. Sinistro</th>
@@ -2165,7 +2195,7 @@ $script_tabla = "<script>
                   $f1 = $sql1->fetch_assoc();
                   $sector = $f1['tipo_cartera'];
                   $subtipo_cartera = $f1['subtipo_cartera'];
-                ?>
+                  ?>
                   <tr>
                     <td><?php echo $row['cod_siniestro']; ?></td>
                     <td><?php echo $row['f_siniestro']; ?></td>
@@ -2191,18 +2221,18 @@ $script_tabla = "<script>
                     <td><?php echo $sector; ?></td>
                     <td><?php echo $subtipo_cartera; ?></td>
                   </tr>
-                <?php
+                  <?php
                 }
                 ?>
               </tbody>
               <?php echo $script_tabla; ?>
             </table>
           </div>
-        <?php
+          <?php
           break;
         case 'sinistros_pendientes_unisersoft_otros':
           //SEGUN REUNION DEL 2022-09-15 Se toma como dato referencia para reporte de produccion la fecha de inicio de vigencia de poliza
-
+      
           $consulta = "SELECT * FROM comercial.siniestros";
 
           if (!isset($_POST['cb_lapso'])) {
@@ -2219,13 +2249,14 @@ $script_tabla = "<script>
 
           $consulta .= " AND ramo_general <> 'AUTOMOTORES' and estado='PENDIENTE'";
           //echo $consulta;
-
+      
           $result = mysqli_query($con, $consulta);
-        ?>
+          ?>
           <h2 align="center"><?= $titulo ?> </h2>
           <br>
           <div id="datos_reportes" class="table-responsive table">
-            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%' id='tabla_generar'>
+            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%'
+              id='tabla_generar'>
               <thead>
                 <tr class='text-center'>
                   <th>Nro. Sinistro</th>
@@ -2270,7 +2301,7 @@ $script_tabla = "<script>
                   $f1 = $sql1->fetch_assoc();
                   $sector = $f1['tipo_cartera'];
                   $subtipo_cartera = $f1['subtipo_cartera'];
-                ?>
+                  ?>
                   <tr>
                     <td><?php echo $row['cod_siniestro']; ?></td>
                     <td><?php echo $row['f_siniestro']; ?></td>
@@ -2298,14 +2329,14 @@ $script_tabla = "<script>
                     <td><?php echo $sector; ?></td>
                     <td><?php echo $subtipo_cartera; ?></td>
                   </tr>
-                <?php
+                  <?php
                 }
                 ?>
               </tbody>
               <?php echo $script_tabla; ?>
             </table>
           </div>
-        <?php
+          <?php
           break;
         case 'automovil':
           //Creacion de reportes automovil
@@ -2340,11 +2371,12 @@ $script_tabla = "<script>
           //echo $consulta;
           $result = mysqli_query($con, $consulta);
 
-        ?>
+          ?>
           <h2 align="center"><?= $titulo ?> </h2>
           <br>
           <div id="datos_reportes" class="table-responsive table">
-            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%' id='tabla_generar'>
+            <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%'
+              id='tabla_generar'>
               <thead>
                 <tr class='text-center'>
                   <th>COD. CLIENTE </th>
@@ -2379,7 +2411,7 @@ $script_tabla = "<script>
               <tbody>
                 <?php
                 while ($row = mysqli_fetch_assoc($result)) {
-                ?>
+                  ?>
                   <tr>
                     <td><?php echo $row['cod_cliente']; ?></td>
                     <td><?php echo $row['completo']; ?></td>
@@ -2409,14 +2441,14 @@ $script_tabla = "<script>
                     <td><?php echo $row['estado']; ?></td>
                     <td><?php echo $row['f_registro']; ?></td>
                   </tr>
-                <?php
+                  <?php
                 }
                 ?>
               </tbody>
               <?php echo $script_tabla; ?>
             </table>
           </div>
-      <?php
+          <?php
           break;
         case 'emision_produccion':
           include 'reports/emision/produccion_emision.php';

@@ -14,43 +14,41 @@ $con->query("SET NAMES 'utf8'");
         <ul class="nav side-menu">
             <?php
             if ($tipo_usuario == "admin") {
-            ?>
+                ?>
                 <li class="<?php if (isset($active5)) {
-                                echo $active5;
-                            } ?>">
+                    echo $active5;
+                } ?>">
                     <a href="dashboard.php"><i class="fa fa-window-restore" aria-hidden="true"></i> Inicio</a>
                 </li>
                 <li class="<?php if (isset($active5)) {
-                                echo $active5;
-                            } ?>">
+                    echo $active5;
+                } ?>">
                     <a href="reporte.php"><i class="fas fa-book"></i> Reportes</a>
                 </li>
-            <?php
-            }elseif (
-                $tipo_usuario == "ESTADISTICA" or $tipo_usuario == "COMERCIAL" or
-                $tipo_usuario == "LIQUIDADOR" or $tipo_usuario == 'INSPECTOR' or $tipo_usuario == 'AUDITORIA' or $tipo_usuario == 'UIF' or $tipo_usuario == 'ESTATAL'  or $tipo_usuario == 'GERENTE COMERCIAL'
-				or $tipo_usuario == 'COBRANZA' or $tipo_usuario == 'JEFE COMERCIAL' or $tipo_usuario == 'EMISION' or $tipo_usuario == 'JEFE EMISION' or $tipo_usuario == 'GERENTE RECLAMOS' or $tipo_usuario == 'JEFE RECLAMOS' or $tipo_usuario == 'COTIZADOR RECLAMOS'
+                <?php
+            } elseif (
+                $tipo_usuario == "ESTADISTICA" or $tipo_usuario == "COMERCIAL" or $tipo_usuario == "LIQUIDADOR" or $tipo_usuario == 'INSPECTOR' or $tipo_usuario == 'AUDITORIA' or $tipo_usuario == 'UIF' or $tipo_usuario == 'ESTATAL' or $tipo_usuario == 'GERENTE COMERCIAL' or $tipo_usuario == 'COBRANZA' or $tipo_usuario == 'JEFE COMERCIAL' or $tipo_usuario == 'EMISION' or $tipo_usuario == 'JEFE EMISION' or $tipo_usuario == 'GERENTE RECLAMOS' or $tipo_usuario == 'JEFE RECLAMOS' or $tipo_usuario == 'COTIZADOR RECLAMOS'
             ) { ?>
                 <li class="<?php if (isset($active5)) {
-                                echo $active5;
-                            } ?>">
+                    echo $active5;
+                } ?>">
                     <a href="dashboard.php"><i class="fa fa-window-restore" aria-hidden="true"></i> Inicio</a>
                 </li>
                 <li class="<?php if (isset($active5)) {
-                                echo $active5;
-                            } ?>">
+                    echo $active5;
+                } ?>">
                     <a href="reporte.php"><i class="fas fa-book"></i> Reportes</a>
                 </li>
-            <?php
+                <?php
             }
             if ($tipo_usuario == 'SECRETARIA' or $tipo_usuario == 'RECEPCIONISTA') {
-            ?>
+                ?>
                 <li class="<?php if (isset($active5)) {
-                                echo $active5;
-                            } ?>">
+                    echo $active5;
+                } ?>">
                     <a href="reporte.php"><i class="fas fa-book"></i> Reportes</a>
                 </li>
-            <?php
+                <?php
             }
             ?>
         </ul>
@@ -67,7 +65,8 @@ $con->query("SET NAMES 'utf8'");
             </div>
             <ul class="nav navbar-nav navbar-right">
                 <li class="">
-                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                        aria-expanded="false">
                         <img src="images/persona.png?>" alt=""><?php echo $usuario; ?>
                         <span class=" fa fa-angle-down"></span>
                     </a>
@@ -77,7 +76,7 @@ $con->query("SET NAMES 'utf8'");
                     </ul>
                 </li>
                 <li class="">
-                    <a href="../unisersoft/dashboard.php">
+                    <a href="<?= "http://192.168.10.88:5173/inicio" ?>">
                         <span class=" fa fa-home"></span>
                     </a>
                 </li>
