@@ -144,7 +144,7 @@ $script_tabla = "<script>
                   <th>CONCEPTO</th>
                   <th>PRECIO</th>
                   <th>PROVEEDOR</th>
-                  <th>DESCUENTO</th>
+                  <th>DESCUENTO %</th>
                 </tr>
               </thead>
               <tbody>
@@ -176,7 +176,7 @@ $script_tabla = "<script>
                       <?php echo $row['proveedor']; ?>
                     </td>
                     <td>
-                      <?php echo $row['descuento']; ?>
+                      <?php echo number_format((float)$row['descuento'], 2, '.', ''); ?>
                     </td>
                   </tr>
                   <?php
