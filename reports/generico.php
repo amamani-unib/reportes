@@ -22,4 +22,7 @@ switch ($reporte) {
     case 'produccion_item':
         include_once "comercial/items.php";
         break;
+    case "log_cauciones":
+        include "auditoria/log_cauciones.php";
+        break;
 }
