@@ -97,6 +97,7 @@ $nombre = $_SESSION["nombre"];
                         }
                         if ($tipo_usuario == 'admin' or $tipo_usuario == 'GERENTE GENERAL' or $tipo_usuario == 'AUDITORIA') {
                           ?>
+                      <option value="log_cauciones">Registros del sistema de cauciones</option>
                       <option value="libro_ventas">Reporte Libro Ventas</option>
                       <option value="siniestro_tc_log">Trabajo - Compara - Logs</option>
                       <option value="log_primas_cobranzas">Primas por cobrar - Logs</option>
@@ -330,7 +331,7 @@ $nombre = $_SESSION["nombre"];
   <script>
     function ver_div() {
       var repo = document.getElementById("repo").value;
-      if (repo == 'produccion_item') {
+      if (repo == 'produccion_item' || repo == 'log_cauciones') {
         document.getElementById('formulario').action = "reports/generico.php";
       } else {
         document.getElementById('formulario').action = "generar_reporte.php";
