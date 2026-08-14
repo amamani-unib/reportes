@@ -105,7 +105,8 @@ $script_tabla = "<script>
       switch ($repo) {
         case 'reporte_trabajo_compra':
 
-          $consulta = "SELECT tc.usuario, tc.cod_siniestro, tc.cod_poliza, tc.modelo as tipo, tc.cod_trabajo_compra as codigo, tc.asegurado, tc.total as sum_monto, num_reparaciones as cantidad_items, tcr.concepto , tcr.descripcion, tcr.monto as precio, tc.moneda, tcr.f_registro, tcr.cantidad, tc.proveedor, tc.descuento
+          $consulta = "SELECT tc.usuario, tc.cod_siniestro, tc.cod_poliza, tc.modelo as tipo, tc.cod_trabajo_compra as codigo, tc.asegurado, tc.total as sum_monto, num_reparaciones as cantidad_items, 
+		  tcr.concepto , tcr.descripcion, tcr.monto as precio, tc.moneda, tcr.f_registro, tcr.cantidad, tc.proveedor, tc.descuento
           FROM trabajo_compra as tc INNER JOIN trabajo_compra_reparaciones AS tcr ON tc.cod_trabajo_compra = tcr.cod_trabajo_compra";
           if (!isset($_POST['cb_lapso'])) {
             $consulta .= " WHERE tc.f_registro like '%$fecha_dia%' and tc.estado <> 'ELIMINADO'";
@@ -199,7 +200,7 @@ $script_tabla = "<script>
                                   when pc.tipo_pago='CONTADO' THEN pc.prima_contado  
                                   when pc.tipo_pago='CREDITO' THEN pc.prima_credito
                                 END ,2) as prima_total_c,
-            rc.moneda,pc.p_factor_tasa_tecnica, ROUND(pc.prima_neta,2),pc.fecha_emision,pc.fecha_inicio,pc.fecha_fin, pc.dias_transcurridos,rc.tipo_cartera,rc.subtipo_cartera,
+            pc.moneda,pc.p_factor_tasa_tecnica, ROUND(pc.prima_neta,2),pc.fecha_emision,pc.fecha_inicio,pc.fecha_fin, pc.dias_transcurridos,rc.tipo_cartera,rc.subtipo_cartera,
             pc.tipo_pago, rc.intermediario,ROUND(pc.com_intermediario_gnv,2),ROUND(pc.com_intermediario,2),pc.num_cuota,pc.f_registro,pc.usuario,rc.modalidad
             FROM comercial.pol_reporte_comercial as rc INNER JOIN comercial.pol_calculo_prima as pc ON rc.cod_poliza=pc.cod_poliza AND rc.cod_cotizacion = pc.cod_cotizacion";
 
@@ -247,7 +248,7 @@ $script_tabla = "<script>
                   <th>TERREMOTO</th>
                   <th>TERRORISMO</th>
                   <th>PRIMA TOTAL</th>
-                  <th>MONEDA</th>
+                  <th>MONEDA.</th>
                   <th>FACTOR DE NETO</th>
                   <th>PRIMA NETA</th>
                   <th>FECHA DE EMISION</th>
@@ -717,8 +718,8 @@ $script_tabla = "<script>
           </div>
           <?php
           break;
-        case 'sinistros_liquidados_au_unisersoft':
-          require_once "reports/siniestros/sinistros_liquidados_au_unisersoft.php";
+        case 'siniestros_liquidados_au_unisersoft':
+          require_once "reports/siniestros/siniestros_liquidados_au_unisersoft.php";
           break;
         case 'sinistros_pendientes':
           //$msj_log = "REPORTE SINIESTROS PENDIENTES";
@@ -1308,6 +1309,7 @@ $script_tabla = "<script>
                   <th>Marca</th>
                   <th>Placa</th>
                   <th>Uso Vehículo</th>
+                  <th>Canal de Denuncia</th>
                 </tr>
               </thead>
               <tbody>
@@ -1371,6 +1373,7 @@ $script_tabla = "<script>
                     <td><?php echo $marca; ?></td>
                     <td><?php echo $placa; ?></td>
                     <td><?php echo $uso; ?></td>
+                    <td><?php echo $row['canal']; ?></td>
                   </tr>
                   <?php
                 }
@@ -1387,12 +1390,12 @@ $script_tabla = "<script>
           WHERE s.cod_poliza <> 'CORTE' AND s.f_registro BETWEEN \'$fecha_inicio\' and \'$fecha_final\'"; */
 
           $consulta = "SELECT cp.id_calculo_prima,  rc.cod_cliente, rc.cod_poliza, rc.regional, rc.tomador, cp.asegurado, rc.tipo_poliza, rc.ramo,
-          cp.movimiento, rc.nro_anexo, ROUND(cp.valor_asegurado,2), ROUND(cp.prima_credito,2), ROUND(cp.prima_contado,2), ROUND(cp.prima_neta,2), rc.moneda,
+          cp.movimiento, rc.nro_anexo, ROUND(cp.valor_asegurado,2), ROUND(cp.prima_credito,2), ROUND(cp.prima_contado,2), ROUND(cp.prima_neta,2), cp.moneda,
           cp.fecha_emision, cp.fecha_inicio, cp.fecha_fin, cp.dias_transcurridos, rc.tipo_cartera, rc.subtipo_cartera,
           cp.tipo_pago, rc.intermediario, cp.observaciones, ROUND(cp.itf,2), ROUND(cp.it,2), ROUND(cp.iva,2), ROUND(cp.aba,2), ROUND(cp.fpa,2), 
           ROUND(cp.aps,2), ROUND(cp.com_compania,2), ROUND(cp.prima_riesgo,2), ROUND(cp.itf_remesa,2), ROUND(cp.iue_remesa,2), ROUND(cp.com_banca,2),
           ROUND(cp.prima_adicional,2), ROUND(cp.derechos_emision,2), ROUND(cp.com_intermediario_gnv,2),
-          ROUND(cp.com_intermediario,2), ROUND(cp.prima_riesgo_tecnica,2),cp.id_calculo_prima,cp.cod_control,cp.cod_unico,rc.asi_vial,cp.hora_ini,cp.hora_fin
+          ROUND(cp.com_intermediario,2), ROUND(cp.prima_riesgo_tecnica,2),cp.id_calculo_prima,cp.cod_control,cp.cod_unico,rc.asi_vial,cp.hora_ini,cp.hora_fin,rc.tipo_reaseguro
           FROM comercial.pol_reporte_comercial AS rc INNER JOIN comercial.pol_calculo_prima AS cp                            
           ON  cp.cod_poliza = rc.cod_poliza";
 
@@ -1466,6 +1469,7 @@ $script_tabla = "<script>
                   <th>COMISIÓN INTERMEDIARIO GNV</th>
                   <th>COMISIÓN INTERMEDIARIO</th>
                   <th>PRIMA RIESGO TECNICA</th>
+				  <th>TIPO DE REASEGURO</th>
                 </tr>
               </thead>
               <tbody>
@@ -1532,6 +1536,7 @@ $script_tabla = "<script>
                     <td><?php echo $row['ROUND(cp.com_intermediario_gnv,2)']; ?></td>
                     <td><?php echo $row['ROUND(cp.com_intermediario,2)']; ?></td>
                     <td><?php echo $row['ROUND(cp.prima_riesgo_tecnica,2)']; ?></td>
+					<td><?php echo $row['tipo_reaseguro']; ?></td>
                   </tr>
                   <?php
                 }

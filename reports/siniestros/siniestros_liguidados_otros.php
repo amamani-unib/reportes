@@ -4,7 +4,7 @@ $consulta = "SELECT op.cod_siniestro, op.f_registro, op.ramo, op.cobertura_afect
 op.cod_poliza, op.importe_dls, op.importe_bs, op.cod_orden, op.receptor,op.nit_receptor , op.doc_descargo, op.f_indemnizacion,
 op.indemnizacion, op.usuario, op.ramo, op.retencion_bs, op.pago_total_bs, op.concepto,s.ramo_general,
 s.estado, s.valor_asegurado, s.tipo_asegurado, s.cod_cliente, s.inicio_v, s.fin_v, s.dep_siniestro,s.cobertura AS cobertura_siniestro,s.sucursal,
-s.observaciones,s.f_siniestro,s.f_denuncia,s.detalle_siniestro, s.f_registro as fecha_reg, s.inspector
+s.observaciones,s.f_siniestro,s.f_denuncia,s.detalle_siniestro, s.f_registro as fecha_reg, s.inspector, op.f_cambio, op.cambio_usd, s.canal
 FROM comercial.orden_pago AS op INNER JOIN comercial.siniestros AS s ON op.cod_siniestro = s.cod_siniestro";
 
 if (!isset($_POST['cb_lapso'])) {
@@ -65,6 +65,9 @@ $result = mysqli_query($con, $consulta);
                 <th>Detalle de Siniestro</th>
                 <th>Estado del Siniestro</th>
                 <th>Inspector</th>
+                <th>Canal de Denuncia</th>
+                <th>Tipo Cambio</th>
+                <th>fecha Tipo Cambio</th>
             </tr>
         </thead>
         <tbody>
@@ -121,6 +124,9 @@ $result = mysqli_query($con, $consulta);
                     <td><?php echo $row['detalle_siniestro']; ?></td>
                     <td><?php echo $row['estado']; ?></td>
                     <td><?php echo $row['inspector']; ?></td>
+                    <td><?php echo $row['canal']; ?></td>
+                    <td><?php echo number_format((float)$row['cambio_usd'], 2, '.', ''); ?></td>
+                    <td><?php echo $row['f_cambio']; ?></td>
                 </tr>
             <?php
             }
