@@ -49,7 +49,7 @@ $nombre = $_SESSION["nombre"];
                           <option value="reporte_comercial">Reporte Comercial - Sistema Unibienes</option>
                           <?php
                         } else {
-                          if ($tipo_usuario == 'admin' or $tipo_usuario == 'GERENTE GENERAL') {
+                          if ($tipo_usuario == 'admin') {
                           ?>
                             <option value="pxclife">Primas por cobrar - Unibienes</option>
                             <option value="sinistros_liquidados_au_unisersoft_completo">Siniestros liquidados automovil - Sistema Unisersoft Completo</option>
@@ -60,6 +60,7 @@ $nombre = $_SESSION["nombre"];
                             <option value="primas_cobranzas">Primas por cobrar - Unisersoft</option>
                             <option value="producion_item">Produccion - Items</option>
                             <option value="log_monto_reserva_ac_completo">Monto de reserva - Logs Completo</option>
+                            <option value="log_cauciones">Logs de Cauciones</option>
                           <?php
                           }
                           if (

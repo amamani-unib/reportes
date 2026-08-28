@@ -6,12 +6,12 @@ FROM comercial.orden_pago as op INNER JOIN comercial.siniestros as s on s.cod_si
 if (!isset($_POST['cb_lapso'])) {
     $consulta .= " WHERE op.f_registro like '%$fecha_dia%'";
     $fecha_aux = $fecha_dia;
-    $msj_log = "REPORTE SINIESTROS LIQUIDADOS AUTOMOTORES BASE UNISERSOFT EL $fecha_dia";
+    $msj_log = "---REPORTE SINIESTROS LIQUIDADOS AUTOMOTORES BASE UNISERSOFT EL $fecha_dia";
     $titulo = "VISTA PREVIA DE SINISTROS LIQUIDADOS AUTOMOTORES SISTEMA UNISERSOFT DEL $fecha_dia";
 } else {
     $consulta .= " WHERE op.f_registro >= '$fecha_inicio' and op.f_registro <= '$fecha_final'";
     $fecha_aux = $fecha_final;
-    $msj_log = "REPORTE SINIESTROS LIQUIDADOS AUTOMOTORES BASE UNISERSOFT ENTRE $fecha_inicio Y $fecha_final";
+    $msj_log = "---REPORTE SINIESTROS LIQUIDADOS AUTOMOTORES BASE UNISERSOFT ENTRE $fecha_inicio Y $fecha_final";
     $titulo = "VISTA PREVIA DE SINISTROS LIQUIDADOS AUTOMOTORES SISTEMA UNISERSOFT DESDE $fecha_inicio HASTA $fecha_final";
 }
 

@@ -2497,6 +2497,9 @@ $script_tabla = "<script>
         case 'siniestros_liquidados_au_unisersoft_detalle':
           include "reports/siniestros/siniestros_liquidados_au_unisersoft_detalle.php";
           break;
+        case 'siniestros_liquidados_au_unisersoft':
+          include "reports/siniestros/sinistros_liquidados_au_unisersoft.php";
+          break;
         case 'siniestros_liquidados_otros_unisersoft_detalle':
           include "reports/siniestros/siniestros_liquidados_otros_unisersoft_detalle.php";
           break;
@@ -2505,6 +2508,9 @@ $script_tabla = "<script>
           break;
         case 'siniestro_ot_op':
           include "reports/auditoria/siniestro_ot_op.php";
+          break;
+        case 'log_cauciones':
+          include "reports/auditoria/log_cauciones.php";
           break;
       }
 
