@@ -59,7 +59,7 @@ $nombre = $_SESSION['nombre'];
 
     <link href="assets/sticky-footer-navbar.css" rel="stylesheet">
     <link href="assets/style.css" rel="stylesheet">
-    <script src="http://code.jquery.com/jquery-2.1.1.js"></SCRIPT>
+    <script src="https://code.jquery.com/jquery-2.1.1.js"></SCRIPT>
 </head>
 
 <body class="nav-md">
