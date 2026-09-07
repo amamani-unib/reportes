@@ -36,7 +36,8 @@ $consulta = "SELECT
     NULL AS op_cod,
     NULL AS op_monto,
     NULL AS op_estado,
-    NULL AS trabajo_compra_id
+    NULL AS trabajo_compra_id,
+    NULL AS id_tc
 FROM comercial.log_comercial lc
 WHERE (lc.movimiento LIKE 'REGISTRO DE SINIESTRO%' 
        OR lc.movimiento LIKE 'ACTUALIZACION DE ESTADO DEL SINIESTRO%'
@@ -62,10 +63,11 @@ SELECT
     NULL AS op_cod,
     NULL AS op_monto,
     NULL AS op_estado,
-    otc.id_registro
+    otc.id_registro,
+    NULL AS id_tc
 FROM comercial.trabajo_compra otc
 WHERE UPPER(TRIM(otc.cod_siniestro)) NOT IN ('', 'CORTE', 'ANULADO', 'ELIMINADO')
-AND UPPER(TRIM(IFNULL(otc.estado, ''))) NOT IN ('ANULADO', 'ELIMINADO')
+AND UPPER(TRIM(IFNULL(otc.estado, ''))) NOT IN ('ANULADO')
 $filtro_otc
 
 UNION ALL
@@ -85,10 +87,11 @@ SELECT
     op.cod_orden,
     op.pago_total_bs,
     op.estado,
-    NULL
+    NULL,
+    op.id_tc
 FROM comercial.orden_pago op
 WHERE UPPER(TRIM(op.cod_siniestro)) NOT IN ('', 'CORTE', 'ANULADO', 'ELIMINADO')
-AND UPPER(TRIM(IFNULL(op.estado, ''))) NOT IN ('ANULADO', 'ELIMINADO')
+AND UPPER(TRIM(IFNULL(op.estado, ''))) NOT IN ('ANULADO')
 $filtro_op
 ORDER BY cod_siniestro, fecha DESC";
 
@@ -179,7 +182,7 @@ function convertirImporteANumero($valor)
     <table class='tabla_datos table-striped table-bordered table table-hover' cellspacing='0' width='100%' id='tabla_generar'>
         <thead>
             <tr class='text-center'>
-                <th>Código de Siniestro</th>
+                <th>Código de Siniestros</th>
                 <th>Fecha de Registro</th>
                 <th>Hora de Registro</th>
                 <th>Usuario que Registró</th>
@@ -190,13 +193,16 @@ function convertirImporteANumero($valor)
                 <th>Orden de Pago</th>
                 <th>Estado del Registro</th>
                 <th>Estado del Siniestro</th>
+                <th>Tipo de Cambio</th>
             </tr>
         </thead>
         <tbody>
             <?php
+            $sinistros_mostrados = [];
             while ($row = mysqli_fetch_assoc($result)) {
                 $cod_siniestro = $row['cod_siniestro'];
                 $tipo_fuente = $row['tipo_fuente'];
+                $id_tipo_cambio = $row['id_tc'];
 
                 // Variables por defecto
                 $glosa = '';
@@ -240,6 +246,14 @@ function convertirImporteANumero($valor)
                 }
 
                 $importe_numerico = convertirImporteANumero($importe);
+                $id_tipo_cambio = $row['id_tc'];
+                if ($id_tipo_cambio !== null && $id_tipo_cambio !== '') {
+                    $query_tc = $con->query("SELECT valor FROM comercial.tipo_cambio WHERE id = '$id_tipo_cambio'");
+                    $filas3 = $query_tc->fetch_assoc();
+                    $valor_tc = $filas3['valor'];
+                } else {
+                    $valor_tc = '';
+                }
             ?>
                 <tr>
                     <td><?php echo $cod_siniestro; ?></td>
@@ -253,8 +267,47 @@ function convertirImporteANumero($valor)
                     <td><?php echo $orden_pago; ?></td>
                     <td><?php echo $estado_registro; ?></td>
                     <td><?php echo $estado_siniestro; ?></td>
+                    <td><?php echo $valor_tc; ?></td>
                 </tr>
+                <?php
+                if ($cod_siniestro != ' ' && !in_array($cod_siniestro, $sinistros_mostrados, true)) {
+                    $bandera = 1;
+                    $sinistros_mostrados[] = $cod_siniestro;
+                    // datos de siniestros actual
+                    $glosa = 'MONTO DE RESERVA ACTUAL';
+                    $query_estado = $con->query("SELECT monto_reserva,estado,usuario,
+                    DATE(s.f_registro) AS fecha_registro,
+                    TIME(s.f_registro) AS hora_registro
+                    FROM comercial.siniestros as s
+                                 WHERE  s.cod_siniestro = '$cod_siniestro'");
+                    $filas2 = $query_estado->fetch_assoc();
+                    $importe = $filas2['monto_reserva'];
+                    $moneda = 'DOLARES';
+                    $ot_oc_asociado = '';
+                    $orden_pago = '';
+                    $estado_registro = '';
+                    $estado_siniestro = $filas2['estado'];
+                }
+                if (isset($filas2)) {
+                    $importe_numerico = convertirImporteANumero($importe);
+                ?>
+                    <tr>
+                        <td><?php echo $cod_siniestro; ?></td>
+                        <td><?php echo $filas2['fecha_registro']; ?></td>
+                        <td><?php echo $filas2['hora_registro']; ?></td>
+                        <td><?php echo $filas2['usuario']; ?></td>
+                        <td><?php echo $glosa; ?></td>
+                        <td align="right"><?php echo number_format($importe_numerico, 2, '.', ','); ?></td>
+                        <td><?php echo $moneda; ?></td>
+                        <td><?php echo $ot_oc_asociado; ?></td>
+                        <td><?php echo $orden_pago; ?></td>
+                        <td><?php echo $estado_registro; ?></td>
+                        <td><?php echo $estado_siniestro; ?></td>
+                        <td></td>
+                    </tr>
             <?php
+                    unset($filas2);
+                }
             }
             ?>
         </tbody>
