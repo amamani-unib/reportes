@@ -2546,6 +2546,18 @@ $script_tabla = "<script>
         case 'reporte_comercial_aps':
           include "reports/comercial/reporte_comercial_aps.php";
           break;
+        case 'reporte_comercial_aps_forA1':
+          include "reports/comercial/reporte_comercial_aps_forA1.php";
+          break;
+        case 'aps_produccion':
+          include "reports/emision/aps_produccion.php";
+          break;
+        case 'aps_siniestros_generales':
+          include "reports/siniestros/aps_siniestros_generales.php";
+          break;
+        case 'aps_siniestros_liquidados_otros':
+          include "reports/siniestros/aps_siniestros_liquidados_otros.php";
+          break;
       }
 
       $inserta_log = "INSERT INTO reportes.log_reportes (`usuario`, `distrito`, `f_registro`,`movimiento`, `host`, `sentencia`) 
