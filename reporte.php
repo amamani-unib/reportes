@@ -49,7 +49,7 @@ $nombre = $_SESSION["nombre"];
                           <option value="reporte_comercial">Reporte Comercial - Sistema Unibienes</option>
                           <?php
                         } else {
-                          if ($tipo_usuario == 'admin' or $tipo_usuario == 'GERENTE GENERAL') {
+                          if ($tipo_usuario == 'admin') {
                           ?>
                             <option value="pxclife">Primas por cobrar - Unibienes</option>
                             <option value="sinistros_liquidados_au_unisersoft_completo">Siniestros liquidados automovil -
@@ -62,12 +62,16 @@ $nombre = $_SESSION["nombre"];
                             <option value="primas_cobranzas">Primas por cobrar - Unisersoft</option>
                             <option value="producion_item">Produccion - Items</option>
                             <option value="log_monto_reserva_ac_completo">Monto de reserva - Logs Completo</option>
+                            <option value="reporte_comercial_aps">Reporte APS Produccion Sistema Unisersoft</option>
+                            <option value="siniestros_generales">Siniestros generales - Sistema Unisersoft</option>
+                            <option value="siniestros_liquidados_otros">Siniestros liquidados otros - Sistema Unisersoft</option>
+                            <option value="reporte_comercial_aps_forA1">Reporte APS - Formulario A1 Sistema Unisersoft</option>
                           <?php
                           }
-                          if ($tipo_usuario == 'admin' or $tipo_usuario == 'COMERCIAL' or $tipo_usuario == 'JEFE COMERCIAL' or $tipo_usuario == 'ESTADISTICA') {
-
+                          if ($tipo_usuario == 'admin' or $tipo_usuario == 'JEFE COMERCIAL' or $tipo_usuario == 'ESTADISTICA' or $tipo_usuario == 'JEFE EMISION') {
                           ?>
-                            <option value="reporte_comercial_aps">Reporte APS Produccion Sistema Unisersoft</option>
+
+                            <option value="aps_produccion">Producción APS del Sistema Unisersoft</option>
                           <?php
                           }
                           if (
@@ -82,8 +86,8 @@ $nombre = $_SESSION["nombre"];
                           }
                           if ($tipo_usuario == 'admin' or $tipo_usuario == 'GERENTE GENERAL' or $tipo_usuario == 'EMISION' or $tipo_usuario == 'JEFE EMISION') {
                           ?>
-                            <option value="emision_produccion">Emisor - Producción del Sistema Unisersoft (Moneda origen)
-                            </option>
+
+                            <option value="emision_produccion">Emisor - Producción del Sistema Unisersoft (Moneda origen)</option>
                             <option value="reporte_comercial_usd_t">Producción del Sistema Unisersoft (DOLARIZADA)</option>
 
                           <?php
@@ -199,13 +203,9 @@ $nombre = $_SESSION["nombre"];
                             $tipo_usuario == 'UIF' or $tipo_usuario == 'GNAF' or $tipo_usuario == 'GERENTE RECLAMOS' or $tipo_usuario == 'JEFE RECLAMOS' or $tipo_usuario == 'AUDITORIA'
                           ) {
                           ?>
-                            <option value="siniestros_liquidados_au">Siniestros liquidados automovil - Sistema Unibienes
-                            </option>
-                            <option value="siniestros_liquidados_au_unisersoft">Siniestros liquidados automovil - Sistema
-                              Unisersoft</option>
-                            <option value="siniestros_liquidados_au_unisersoft_detalle">Siniestros liquidados automovil
-                              Detalle - Sistema Unisersoft</option>
-
+                            <option value="siniestros_liquidados_au">Siniestros liquidados automovil - Sistema Unibienes</option>
+                            <option value="siniestros_liquidados_au_unisersoft">Siniestros liquidados automovil - Sistema Unisersoft</option>
+                            <option value="siniestros_liquidados_au_unisersoft_detalle">Siniestros liquidados automovil Detalle - Sistema Unisersoft</option>
                           <?php
                           }
                           if (
@@ -213,11 +213,8 @@ $nombre = $_SESSION["nombre"];
                             $tipo_usuario == 'INSPECTOR' or $tipo_usuario == 'GNAF' or $tipo_usuario == 'GERENTE RECLAMOS' or $tipo_usuario == 'JEFE RECLAMOS' or $tipo_usuario == 'AUDITORIA'
                           ) {
                           ?>
-                            <option value="siniestros_liquidados_otros">Siniestros liquidados otros - Sistema Unisersoft
-                            </option>
-                            <option value="siniestros_liquidados_otros_unisersoft_detalle">Siniestros liquidados otros
-                              Detalle- Sistema Unisersoft</option>
-
+                            <option value="aps_siniestros_liquidados_otros">Siniestros liquidados otros - Sistema Unisersoft</option>
+                            <option value="siniestros_liquidados_otros_unisersoft_detalle">Siniestros liquidados otros Detalle- Sistema Unisersoft</option>
                           <?php
                           }
                           if (
@@ -226,10 +223,8 @@ $nombre = $_SESSION["nombre"];
                           ) {
                           ?>
                             <option value="sinistros_pendientes">Siniestros pendientes - Sistema Unibienes</option>
-                            <option value="sinistros_pendientes_unisersoft_automovil">Siniestros pendientes (Automotor)-
-                              Sistema Unisersoft</option>
-                            <option value="sinistros_pendientes_unisersoft_otros">Siniestros pendientes (Otros ramos)- Sistema
-                              Unisersoft</option>
+                            <option value="sinistros_pendientes_unisersoft_automovil">Siniestros pendientes (Automotor)- Sistema Unisersoft</option>
+                            <option value="sinistros_pendientes_unisersoft_otros">Siniestros pendientes (Otros ramos)- Sistema Unisersoft</option>
                           <?php
                           }
                           if (
@@ -237,7 +232,7 @@ $nombre = $_SESSION["nombre"];
                             $tipo_usuario == 'AUDITORIA' or $tipo_usuario == 'UIF' or $tipo_usuario == 'GERENTE RECLAMOS' or $tipo_usuario == 'JEFE RECLAMOS' or $tipo_usuario == 'AUDITORIA' or $tipo_usuario == 'JEFE COMERCIAL'
                           ) {
                           ?>
-                            <option value="siniestros_generales">Siniestros generales - Sistema Unisersoft</option>
+                            <option value="aps_siniestros_generales">Siniestros generales - Sistema Unisersoft</option>
                           <?php
                           }
                           if (
