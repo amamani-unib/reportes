@@ -4,7 +4,7 @@ $consulta = "SELECT op.cod_siniestro, op.f_registro, op.ramo, op.cobertura_afect
 op.cod_poliza, op.importe_dls, op.importe_bs, op.cod_orden, op.receptor,op.nit_receptor , op.doc_descargo, op.f_indemnizacion,
 op.indemnizacion, op.usuario, op.ramo, op.retencion_bs, op.pago_total_bs, op.concepto,s.ramo_general,
 s.estado, s.valor_asegurado, s.tipo_asegurado, s.cod_cliente, s.inicio_v, s.fin_v, s.dep_siniestro,s.cobertura AS cobertura_siniestro,s.sucursal,
-s.observaciones,s.f_siniestro,s.f_denuncia,s.detalle_siniestro, s.f_registro as fecha_reg, s.inspector, op.f_cambio, op.cambio_usd, s.canal
+s.observaciones,s.f_siniestro,s.f_denuncia,s.detalle_siniestro, s.f_registro as fecha_reg, s.inspector, op.f_cambio, op.cambio_usd, s.canal,op.cambio_usd
 FROM 20260903_comercial.orden_pago AS op INNER JOIN 20260903_comercial.siniestros AS s ON op.cod_siniestro = s.cod_siniestro";
 
 if (!isset($_POST['cb_lapso'])) {
@@ -75,7 +75,7 @@ $result = mysqli_query($con, $consulta);
                 <th>fecha Tipo Cambio</th>
                 <th>Sector</th>
                 <th>Código Sector</th>
-                <th>Moneda (Monto de reserva)</th>
+                <th>Moneda (Orden de pago)</th>
                 <th>Codigo de moneda</th>
             </tr>
         </thead>
@@ -96,13 +96,29 @@ $result = mysqli_query($con, $consulta);
                 $sector = $f1['tipo_cartera'];
                 $tomador = $f1['tomador'];
                 $cia = $f1['cia'];
+                $subtipo_cartera = $f1['subtipo_cartera'];
+                $cod_poliza = $row['cod_poliza'];
+                if ($cia == '') {
+                    $query_1 = "SELECT tipo_cartera, subtipo_cartera, tomador FROM unibienes.reporte_comercial WHERE nro_poliza='$cod_pol'";
+                    $sql1 = $con->query($query_1);
+                    $f1 = $sql1->fetch_assoc();
+                    $sector = $f1['tipo_cartera'];
+                    $tomador = $f1['tomador'];
+                    $cia = 116;
+                }
                 if ($sector == 'ESTATAL') {
                     $cod_sector = "E";
                 } else {
                     $cod_sector = "P";
                 }
-                $subtipo_cartera = $f1['subtipo_cartera'];
-                $cod_poliza = $row['cod_poliza'];
+                if ($tomador == '') {
+                    $tomador = "NO DEFINIDO";
+                    $sector = "NO DEFINIDO";
+                    $subtipo_cartera = "NO DEFINIDO";
+                    $cod_sector = "NO DEFINIDO";
+                }
+
+
                 $sigla_ramo = substr($cod_poliza, 0, -10);
 
                 if ($sigla_ramo !== '') {
@@ -194,8 +210,8 @@ $result = mysqli_query($con, $consulta);
                     <td><?php echo $row['f_cambio']; ?></td>
                     <td><?php echo $sector; ?></td>
                     <td><?php echo $cod_sector; ?></td>
-                    <td><?php echo "Dólares"; ?></td>
-                    <td><?php echo "2"; ?></td>
+                    <td><?php echo "Bolivianos"; ?></td>
+                    <td><?php echo "1"; ?></td>
                 </tr>
             <?php
             }
