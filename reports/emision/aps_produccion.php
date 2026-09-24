@@ -108,13 +108,18 @@ if ($cargo_u == 'JEFE EMISION') {
     <tbody>
       <?php
       while ($row = mysqli_fetch_assoc($result)) {
-        if ($row['tipo_cartera'] == 'ESTATAL') {
+        if ($row['tipo_cartera'] == 'ESTATAL' and $row['subtipo_cartera'] != 'BROKER') {
           $inprime = $row['intermediario'];
           $inter = "CARTERA DIRECTA";
           $cod_sector = "E";
         } else {
           $inprime = "";
           $inter = $row['intermediario'];
+          $cod_sector = "P";
+        }
+        if ($row['tipo_cartera'] == 'ESTATAL') {
+          $cod_sector = "E";
+        } else {
           $cod_sector = "P";
         }
         if ($row['tipo_cartera'] == 'PRIVADO' and $row['cod_cliente'] == 'CUBLP00000068' and $row['fecha_inicio'] >= '2026-07-01') {
@@ -171,6 +176,8 @@ if ($cargo_u == 'JEFE EMISION') {
           $sele2 = $con->query($query_aux);
           $filas2 = $sele2->fetch_assoc();
           $cod_aps = $filas2['cod_aps'];
+        } else {
+          $cod_aps = '';
         }
         $cod_modalidad = $row['modalidad_ramo'];
         if ($cod_modalidad == '') {
@@ -227,7 +234,6 @@ if ($cargo_u == 'JEFE EMISION') {
             $cod_movimiento = "R";
             break;
           case 'DEVOLUCION':
-          case 'RESCISION':
           case 'ANULACION POR FALTA DE PAGO':
           case 'ANULACION':
             $cod_movimiento = "A";
@@ -253,6 +259,10 @@ if ($cargo_u == 'JEFE EMISION') {
           case 'LIQUIDACION':
             $cod_movimiento = "L";
             break;
+          case 'RESCISION':
+            $cod_movimiento = "A";
+            $movimiento = "ANULACION";
+            break;
           default:
             $cod_movimiento = "";
         }
@@ -274,7 +284,7 @@ if ($cargo_u == 'JEFE EMISION') {
           <td><?php echo $row['asegurado']; ?></td>
           <td><?php echo $row['ramo']; ?></td>
           <td><?php echo $row['tipo_poliza']; ?></td>
-          <td><?php echo $row['movimiento']; ?></td>
+          <td><?php echo $movimiento; ?></td>
           <td><?php echo $cod_movimiento; ?></td>
           <td><?php echo $row['auxiliar']; ?></td>
           <td><?php echo $asistencia_vial; ?></td>
