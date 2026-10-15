@@ -87,10 +87,10 @@ if ($cargo_u == 'JEFE EMISION') {
         <th>FECHA FIN DE VIGENCIA</th>
         <th>HORA DE FIN VIGENCIA</th>
         <th>DÍAS DE VIGENCIA</th>
-        <th>SECTOR</th>
-        <th>CODIGO DE SECTOR</th>
-        <th>TIPO DE CARTERA</th>
-        <th>SUBTIPO DE CARTERA</th>
+        <th>SECTOR</th><!--TIPO DE CARTERA-->
+        <th>CODIGO SECTOR</th><!--CODIGO DE CARTERA-->
+        <th>TIPO DE CARTERA</th><!--CANAL-->
+        <th>SUBTIPO DE CARTERA(PRODUCTO)</th><!---PRODUCTO-->
         <th>INTERMEDIARIO</th>
         <th>COD. APS INTERMEDIARIO</th>
         <th>TIPO PAGO</th>
@@ -100,7 +100,6 @@ if ($cargo_u == 'JEFE EMISION') {
         <th>NUMERO DE CUOTAS</th>
         <th>FECHA Y HORA DE REGISTRO</th>
         <th>USUARIO</th>
-        <th>MODALIDAD</th>
         <th>HISTORICO</th>
         <th>TIPO DE CAMBIO DEL DOLAR DEL DIA DEL REGISTRO</th>
       </tr>
@@ -108,22 +107,17 @@ if ($cargo_u == 'JEFE EMISION') {
     <tbody>
       <?php
       while ($row = mysqli_fetch_assoc($result)) {
-        if ($row['tipo_cartera'] == 'ESTATAL' and $row['subtipo_cartera'] != 'BROKER') {
+        /* if ($row['tipo_cartera'] == 'ESTATAL' and $row['subtipo_cartera'] != 'BROKER') {
           $inprime = $row['intermediario'];
-          $inter = "CARTERA DIRECTA";
-          $cod_sector = "E";
+          $inter = "CARTERA DIRECTA"; 
         } else {
           $inprime = "";
           $inter = $row['intermediario'];
-          $cod_sector = "P";
-        }
+        } */
         if ($row['tipo_cartera'] == 'ESTATAL') {
           $cod_sector = "E";
         } else {
           $cod_sector = "P";
-        }
-        if ($row['tipo_cartera'] == 'PRIVADO' and $row['cod_cliente'] == 'CUBLP00000068' and $row['fecha_inicio'] >= '2026-07-01') {
-          $inprime = "COLECTIVO";
         }
         if ($row['cod_control'] == 1) {
           $nro_anexo = '';
@@ -171,8 +165,9 @@ if ($cargo_u == 'JEFE EMISION') {
         } else {
           $historico = 'ANTIGUO';
         }
-        if ($row['subtipo_cartera'] == 'BROKER') {
-          $query_aux = "SELECT cod_aps FROM 20260903_comercial.intermediarios WHERE tipo='BROKER' and intermediario='$inter'";
+        $inter = $row['intermediario'];
+        if ($row['subtipo_cartera'] == 'BROKER' or  $row['subtipo_cartera'] == 'AGENTE') {
+          $query_aux = "SELECT cod_aps FROM 20260903_comercial.intermediarios WHERE tipo='" . $row['subtipo_cartera'] . "' and intermediario='$inter'";
           $sele2 = $con->query($query_aux);
           $filas2 = $sele2->fetch_assoc();
           $cod_aps = $filas2['cod_aps'];
@@ -308,10 +303,10 @@ if ($cargo_u == 'JEFE EMISION') {
           <td><?php echo $row['fecha_fin']; ?></td>
           <td><?php echo $row['hora_fin']; ?></td>
           <td><?php echo $row['dias_transcurridos']; ?></td>
-          <td><?php echo $row['tipo_cartera']; ?></td>
-          <td><?php echo $cod_sector; ?></td>
-          <td><?php echo $row['subtipo_cartera']; ?></td>
-          <td><?php echo $inprime ?></td>
+          <td><?php echo $row['tipo_cartera']; ?></td><!--TIPO DE CARTERA-->
+          <td><?php echo $cod_sector; ?></td><!--CODIGO DE CARTERA-->
+          <td><?php echo $row['subtipo_cartera']; ?></td><!--CANAL-->
+          <td><?php echo $row['modalidad']; ?></td><!---PRODUCTO-->
           <td><?php echo $inter ?></td>
           <td><?php echo $cod_aps ?></td>
           <td><?php echo $row['tipo_pago']; ?></td>
@@ -321,7 +316,6 @@ if ($cargo_u == 'JEFE EMISION') {
           <td><?php echo $row['num_cuota']; ?></td>
           <td><?php echo $row['f_registro']; ?></td>
           <td><?php echo $row['usuario']; ?></td>
-          <td><?php echo $row['modalidad']; ?></td>
           <td><?php echo $historico; ?></td>
           <td><?php echo $row['cambio_usd']; ?></td>
         </tr>
