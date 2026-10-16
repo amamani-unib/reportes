@@ -5,7 +5,7 @@ op.cod_poliza, op.importe_dls, op.importe_bs, op.cod_orden, op.receptor,op.nit_r
 op.indemnizacion, op.usuario, op.ramo, op.retencion_bs, op.pago_total_bs, op.concepto,s.ramo_general,
 s.estado, s.valor_asegurado, s.tipo_asegurado, s.cod_cliente, s.inicio_v, s.fin_v, s.dep_siniestro,s.cobertura AS cobertura_siniestro,s.sucursal,
 s.observaciones,s.f_siniestro,s.f_denuncia,s.detalle_siniestro, s.f_registro as fecha_reg, s.inspector, op.f_cambio, op.cambio_usd, s.canal,op.cambio_usd
-FROM 20260903_comercial.orden_pago AS op INNER JOIN 20260903_comercial.siniestros AS s ON op.cod_siniestro = s.cod_siniestro";
+FROM comercial.orden_pago AS op INNER JOIN comercial.siniestros AS s ON op.cod_siniestro = s.cod_siniestro";
 
 if (!isset($_POST['cb_lapso'])) {
     $consulta .= " WHERE op.f_registro like '%$fecha_dia%'";
@@ -85,12 +85,12 @@ $result = mysqli_query($con, $consulta);
             while ($row = mysqli_fetch_assoc($result)) {
                 $cod_pol = $row['cod_poliza'];
                 $cod_cliente = $row['cod_cliente'];
-                $sele22 = $con->query("SELECT telefono_fijo,email from 20260903_comercial.clientes where cod_cliente = '$cod_cliente' limit 1");
+                $sele22 = $con->query("SELECT telefono_fijo,email from comercial.clientes where cod_cliente = '$cod_cliente' limit 1");
                 $filas22 = $sele22->fetch_assoc();
                 $telefono_fijo = $filas22['telefono_fijo'];
                 $email = $filas22['email'];
 
-                $query_1 = "SELECT tipo_cartera, subtipo_cartera, tomador,cia FROM 20260903_comercial.pol_reporte_comercial WHERE cod_poliza='$cod_pol'";
+                $query_1 = "SELECT tipo_cartera, subtipo_cartera, tomador,cia FROM comercial.pol_reporte_comercial WHERE cod_poliza='$cod_pol'";
                 $sql1 = $con->query($query_1);
                 $f1 = $sql1->fetch_assoc();
                 $sector = $f1['tipo_cartera'];
@@ -122,7 +122,7 @@ $result = mysqli_query($con, $consulta);
                 $sigla_ramo = substr($cod_poliza, 0, -10);
 
                 if ($sigla_ramo !== '') {
-                    $sele2 = $con->query("SELECT modalidad,cod_ramo from 20260903_comercial.x_ramo where sigla = '$sigla_ramo' order by id_ramo desc limit 1");
+                    $sele2 = $con->query("SELECT modalidad,cod_ramo from comercial.x_ramo where sigla = '$sigla_ramo' order by id_ramo desc limit 1");
                     $filas2 = $sele2->fetch_assoc();
                     $modalidad = $filas2['modalidad'];
                     $cod_ramo = $filas2['cod_ramo'];

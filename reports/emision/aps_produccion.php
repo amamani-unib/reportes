@@ -12,8 +12,8 @@ $consulta = "SELECT pc.id_calculo_prima,month(pc.f_registro) as mes,year(pc.f_re
             pc.moneda, pc.cambio, pc.cambio_usd, pc.p_factor_tasa_tecnica, ROUND(pc.prima_neta,2),pc.fecha_emision,pc.fecha_inicio,pc.fecha_fin, pc.dias_transcurridos,rc.tipo_cartera,rc.subtipo_cartera,
             pc.tipo_pago, pc.lugar, rc.intermediario,ROUND(pc.com_intermediario_gnv,2),ROUND(pc.com_intermediario,2),pc.num_cuota,pc.f_registro,pc.usuario,rc.modalidad,
             pc.hora_ini,pc.hora_fin,c.caedec, pc.cod_cotizacion, pc.auxiliar,pc.porcentaje_comision
-            FROM 20260903_comercial.pol_reporte_comercial as rc INNER JOIN 20260903_comercial.pol_calculo_prima as pc ON rc.cod_poliza=pc.cod_poliza AND rc.cod_cotizacion = pc.cod_cotizacion
-            LEFT JOIN 20260903_comercial.clientes as c ON rc.cod_cliente=c.cod_cliente ";
+            FROM comercial.pol_reporte_comercial as rc INNER JOIN comercial.pol_calculo_prima as pc ON rc.cod_poliza=pc.cod_poliza AND rc.cod_cotizacion = pc.cod_cotizacion
+            LEFT JOIN comercial.clientes as c ON rc.cod_cliente=c.cod_cliente ";
 
 if (!isset($_POST['cb_lapso'])) {
   $consulta .= " WHERE pc.f_registro like '%$fecha_dia%'";
@@ -152,7 +152,7 @@ if ($cargo_u == 'JEFE EMISION') {
 
           $cod_poliza = $row['cod_poliza'];
           $cod_cotizacion = $row['cod_cotizacion'];
-          $query_historico = "SELECT movimiento from 20260903_comercial.pol_calculo_prima 
+          $query_historico = "SELECT movimiento from comercial.pol_calculo_prima 
                     where cod_cotizacion = '$cod_cotizacion' and cod_poliza='$cod_poliza' and movimiento in ('NUEVO','RENOVACION') and id_calculo_prima > 36845 limit 1";
           $resultado_historico = mysqli_query($con, $query_historico);
           $num_rows_historico = mysqli_num_rows($resultado_historico);
@@ -167,7 +167,7 @@ if ($cargo_u == 'JEFE EMISION') {
         }
         $inter = $row['intermediario'];
         if ($row['subtipo_cartera'] == 'BROKER' or  $row['subtipo_cartera'] == 'AGENTE') {
-          $query_aux = "SELECT cod_aps FROM 20260903_comercial.intermediarios WHERE tipo='" . $row['subtipo_cartera'] . "' and intermediario='$inter'";
+          $query_aux = "SELECT cod_aps FROM comercial.intermediarios WHERE tipo='" . $row['subtipo_cartera'] . "' and intermediario='$inter'";
           $sele2 = $con->query($query_aux);
           $filas2 = $sele2->fetch_assoc();
           $cod_aps = $filas2['cod_aps'];
@@ -183,7 +183,7 @@ if ($cargo_u == 'JEFE EMISION') {
         $cod_ramo = $row['cod_ramo'];
         if ($cod_ramo == '' || !is_numeric($cod_ramo)) {
           $tipo_poliza = $row['tipo_poliza'];
-          $sele2 = $con->query("SELECT cod_ramo from 20260903_comercial.x_ramo where tipo_poliza = '$tipo_poliza'order by id_ramo desc limit 1");
+          $sele2 = $con->query("SELECT cod_ramo from comercial.x_ramo where tipo_poliza = '$tipo_poliza'order by id_ramo desc limit 1");
           $filas2 = $sele2->fetch_assoc();
           $cod_ramo = $filas2['cod_ramo'];
         } else {
