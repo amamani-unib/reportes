@@ -167,7 +167,7 @@ if ($cargo_u == 'JEFE EMISION') {
         }
         $inter = $row['intermediario'];
         if ($row['subtipo_cartera'] == 'BROKER' or  $row['subtipo_cartera'] == 'AGENTE') {
-          $query_aux = "SELECT cod_aps FROM comercial.intermediarios WHERE tipo='" . $row['subtipo_cartera'] . "' and intermediario='$inter'";
+          $query_aux = "SELECT cod_aps FROM comercial.intermediarios WHERE tipo='" . $row['subtipo_cartera'] . "' and intermediario LIKE '%$inter%'";
           $sele2 = $con->query($query_aux);
           $filas2 = $sele2->fetch_assoc();
           $cod_aps = $filas2['cod_aps'];
