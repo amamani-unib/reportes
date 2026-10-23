@@ -1,7 +1,7 @@
 <?php
 $msj_log = "SINIESTROS GENERALES APS";
 $consulta = "SELECT s.*, c.telefono_fijo, c.email, s.estado as estado_siniestro
-    FROM (20260903_comercial.siniestros as s inner join 20260903_comercial.clientes as c on c.cod_cliente = s.cod_cliente)";
+    FROM (comercial.siniestros as s inner join comercial.clientes as c on c.cod_cliente = s.cod_cliente)";
 
 if (!isset($_POST['cb_lapso'])) {
     $consulta .= " WHERE s.f_registro like '%$fecha_dia%'";
@@ -74,7 +74,7 @@ $result = mysqli_query($con, $consulta);
                 $estado = $row['estado_siniestro'];
                 $cod_poliza = $row['cod_poliza'];
                 $id_item = $row['id_item'];
-                $query_1 = "SELECT subtipo_cartera,tipo_cartera,tomador,cia FROM 20260903_comercial.pol_reporte_comercial WHERE cod_poliza='$cod_poliza'";
+                $query_1 = "SELECT subtipo_cartera,tipo_cartera,tomador,cia FROM comercial.pol_reporte_comercial WHERE cod_poliza='$cod_poliza'";
                 $sql1 = $con->query($query_1);
                 $f1 = $sql1->fetch_assoc();
                 $sector = $f1['tipo_cartera'];
@@ -87,7 +87,7 @@ $result = mysqli_query($con, $consulta);
                 }
                 $subtipo_cartera = $f1['subtipo_cartera'];
 
-                $query_1 = "SELECT `14`,`15`,`13`,`21` FROM 20260903_comercial.items WHERE id_registro='$id_item' AND `0` LIKE 'CE%'";
+                $query_1 = "SELECT `14`,`15`,`13`,`21` FROM comercial.items WHERE id_registro='$id_item' AND `0` LIKE 'CE%'";
                 $sql1 = $con->query($query_1);
                 $f1 = $sql1->fetch_assoc();
                 $clase = $f1['14'];
@@ -99,7 +99,7 @@ $result = mysqli_query($con, $consulta);
                 $cod_siniestro = $row['cod_siniestro'];
 
                 if ($detalle_siniestros == '') {
-                    $query_narracion = "SELECT narracion FROM 20260903_comercial.siniestro_detalles WHERE cod_siniestro='$cod_siniestro'";
+                    $query_narracion = "SELECT narracion FROM comercial.siniestro_detalles WHERE cod_siniestro='$cod_siniestro'";
                     $sql_narracion = $con->query($query_narracion);
                     $f2 = $sql_narracion->fetch_assoc();
                     $detalle_siniestros = $f2['narracion'];
@@ -140,7 +140,7 @@ $result = mysqli_query($con, $consulta);
                 $sigla_ramo = substr($cod_poliza, 0, -10);
 
                 if ($sigla_ramo !== '') {
-                    $sele2 = $con->query("SELECT modalidad,cod_ramo from 20260903_comercial.x_ramo where sigla = '$sigla_ramo' order by id_ramo desc limit 1");
+                    $sele2 = $con->query("SELECT modalidad,cod_ramo from comercial.x_ramo where sigla = '$sigla_ramo' order by id_ramo desc limit 1");
                     $filas2 = $sele2->fetch_assoc();
                     $modalidad = $filas2['modalidad'];
                     $cod_ramo = $filas2['cod_ramo'];
