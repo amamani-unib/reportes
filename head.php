@@ -20,7 +20,8 @@ $nombre = $_SESSION['nombre'];
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="http://www.php.net/manual/en/function.utf8-encode.php">
+    <!-- Desactivado: no es una hoja de estilos, solo generaba una peticion a internet.
+    <link rel="stylesheet" type="text/css" href="http://www.php.net/manual/en/function.utf8-encode.php"> -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Sistema de Reportes </title>
@@ -30,8 +31,8 @@ $nombre = $_SESSION['nombre'];
     <!-- Font Awesome 
           <link href="css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
         -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"
-        crossorigin="anonymous"></script>
+    <!-- Font Awesome servido localmente (antes: font-awesome/5.15.1/js/all.min.js desde cdnjs) -->
+    <link rel="stylesheet" href="assets/vendor/font-awesome/5.15.4/css/all.min.css">
 
 
     <!-- NProgress -->
@@ -39,7 +40,7 @@ $nombre = $_SESSION['nombre'];
     <!-- iCheck -->
     <link href="css/iCheck/skins/flat/green.css" rel="stylesheet">
     <!-- Datatables -->
-    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet"
+    <link href="assets/vendor/datatables/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet"
         crossorigin="anonymous" />
 
 
@@ -52,14 +53,14 @@ $nombre = $_SESSION['nombre'];
     <!-- Custom Theme Style -->
     <link href="css/custom.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="assets/vendor/datatables-buttons/1.6.5/css/buttons.dataTables.min.css">
     <!-- MICSS button[type="file"] -->
     <link rel="stylesheet" href="css/micss.css">
     <link rel="stylesheet" href="css/autocomplete.css">
 
     <link href="assets/sticky-footer-navbar.css" rel="stylesheet">
     <link href="assets/style.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-2.1.1.js"></SCRIPT>
+    <script src="assets/vendor/jquery/2.1.1/jquery-2.1.1.js"></SCRIPT>
 </head>
 
 <body class="nav-md">

@@ -1,0 +1,3 @@
+# Librerias de terceros servidas localmente: no convertir finales de linea.
+# Varias se cargan con integrity= (SRI); convertir LF a CRLF cambia su hash y el navegador las bloquea.
+assets/vendor/** -text
